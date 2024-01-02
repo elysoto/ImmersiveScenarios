@@ -1,0 +1,22 @@
+version=1
+id=3129175142
+title=Immersive Scenarios
+description=Immersive starting scenarios that provide a more immersive backstory and challenge.
+description=
+description=Unique feature that enables Sandbox configuration with these challenge maps.
+description=
+description=INFO:
+description=Install ModOptions to enable setting Easy, Normal, Hard options
+description=
+description=I recommend Suseptible and Antibodies mods to pair with these mods.
+description=
+description=These scenarios are designed to be hard and realistic requiring your wits to get established. 
+description=
+description=SCENARIOS:
+description=
+description=Hospital Coma - Last thing you remember is that you were driving overnight to see your family. You wake up from a coma to the sound of thunder and lightning still severely injured in a  dark room in what looks to be a hospital.  
+description=Note: Power is initially off. This is temporary and your sandbox configuration will be respected.
+description=
+description=
+tags=Build 41;Hardmode;Map;Realistic
+visibility=public
