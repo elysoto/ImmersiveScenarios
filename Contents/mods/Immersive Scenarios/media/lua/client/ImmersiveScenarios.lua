@@ -25,18 +25,11 @@ ImmersiveScenarios.switchLight = function(x, y, z, onOff)
     if sq then
         for i=0, sq:getObjects():size() -1 do
             local object = sq:getObjects():get(i);
-            --if instanceof(object, "IsoLightSwitch") and object:canSwitchLight() and object:isActivated() then
             if instanceof(object, "IsoLightSwitch") and object:canSwitchLight() and object:isActivated() ~= onOff then
                 --print(object)
                 local args = { x = x, y = y, z = z}
                 print("IScn:switchLight::Light Toggled " ..x.." "..y.." "..z)
                 sendClientCommand(getPlayer(), 'object', 'toggleLight', args)
-                
-                --if object:hasLightBulb() then
-                    --print("turnOffLights::Bulb Removed " ..x.." "..y.." "..z)
-                    --ISTimedActionQueue.add(ISLightActions:new("RemoveLightBulb",getPlayer(), object));                        
-                --end
-                
                 break
             end
         end

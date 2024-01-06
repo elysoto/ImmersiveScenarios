@@ -291,8 +291,6 @@ IScnHospital.EveryTenMin = function()
     local thunder = clim:getThunderStorm();
     thunder:triggerThunderEvent(12929, 2043, true, true, true)
 
-    --getWorld():getFreeEmitter():playSound(_data.soundEffect, _data.coords.x, _data.coords.y, _data.coords.z)
-
     local hoursSurvived = pl:getHoursSurvived()
     if iscnModData.finishScenario then
     
