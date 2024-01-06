@@ -30,7 +30,7 @@ ImmersiveScenarios.switchLight = function(x, y, z, onOff)
                 --print(object)
                 local args = { x = x, y = y, z = z}
                 print("IScn:switchLight::Light Toggled " ..x.." "..y.." "..z)
-                sendClientCommand(getPlayer(), 'object', 'toggleLight', args)           
+                sendClientCommand(getPlayer(), 'object', 'toggleLight', args)
                 
                 --if object:hasLightBulb() then
                     --print("turnOffLights::Bulb Removed " ..x.." "..y.." "..z)
@@ -126,24 +126,57 @@ ImmersiveScenarios.unlockDoor = function(x, y, z)
     end    
 end
 
-ImmersiveScenarios.addBarricade = function(x, y, z, num, faceAway, healthMult)
+ImmersiveScenarios.hardenWindow = function(x, y, z, healthMult)    
     healthMult = healthMult or 1.0
+    
     local objFound = false
     local sq = getCell():getGridSquare(x, y, z)
     if sq then
         for i = 0, sq:getObjects():size()-1 do
-            local o = sq:getObjects():get(i);
-            if instanceof(o, "IsoWindow") then
-                o:addBarricadesDebug(ZombRand(2,5), false);
+            local o = sq:getObjects():get(i);            
+            if instanceof(o, "IsoWindow") then        
+                --local health = o:makeWindowInvincible)
+                --print(o.MaxHealth)
+                --print(o.Health)
+                --mat:setCondition(health * healthMult)                
+                print("IScn::hardenWindow "..x.." "..y.." "..z)
+                print("Does not work yet")
+                objFound = true             
                 break;
             end
-            if instanceof(o, "IsoDoor") then
-                print("IScn::BarricadeDoor "..x.." "..y.." "..z)
+        end
+    else
+        print("Square not found "..x.." "..y.." "..z)
+    end
+    if objFound == false then
+        print("IScn::hardenWindow - Obj Not Found " ..x.." "..y.." "..z)
+    end
+end
+
+ImmersiveScenarios.addBarricade = function(x, y, z, num, faceAway, healthMult, material)    
+    healthMult = healthMult or 1.0
+    material = material or "Plank"
+    
+    local objFound = false
+    local sq = getCell():getGridSquare(x, y, z)
+    if sq then
+        for i = 0, sq:getObjects():size()-1 do
+            local o = sq:getObjects():get(i);            
+            if instanceof(o, "BarricadeAble") then                
                 for i=0, num-1 do
                     local barricade = IsoBarricade.AddBarricadeToObject(o, faceAway)
-                    if barricade:canAddPlank() then
-                        local plank = InventoryItemFactory.CreateItem('Base.Plank')
-                        barricade:addPlank(getPlayer(), plank)                    
+                    local mat = InventoryItemFactory.CreateItem('Base.'..material)
+                    local health = mat:getCondition()
+                    mat:setCondition(health * healthMult)
+                    print("IScn::Barricade "..material.." "..mat:getCondition().." @"..x.." "..y.." "..z)
+                    if material == 'MetalBar' then
+                        barricade:addMetalBar(getPlayer(), mat)          
+                    elseif material == 'SheetMetal' then
+                        barricade:addMetal(getPlayer(), mat)          
+                    else -- if material == 'Plank' then
+                        if barricade:canAddPlank() then
+                            barricade:addPlank(getPlayer(), mat)                    
+                        end
                     end
                 end
                 objFound = true             
