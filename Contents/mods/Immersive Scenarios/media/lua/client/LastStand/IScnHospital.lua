@@ -57,11 +57,13 @@ IScnHospital.OnNewGame = function(player, square)
         local playerName = pl:getDescriptor():getForename()
         local iscnModData = ModData.get("IScnData")     
 
+        iscnModData.hourOffset = IScnHospital.hourOfDay - 7
+
         --Remove all clothes and give player a hospital gown and socks
         pl:clearWornItems();
         pl:getInventory():clear();
         inv:AddItem("Base.KeyRing");
-        clothes = inv:AddItem("Base.HospitalGown");
+        local clothes = inv:AddItem("Base.HospitalGown");
         pl:setWornItem(clothes:getBodyLocation(), clothes);
         clothes = inv:AddItem("Base.Socks_Ankle");
         pl:setWornItem(clothes:getBodyLocation(), clothes);
@@ -73,7 +75,6 @@ IScnHospital.OnNewGame = function(player, square)
         pl:getStats():setFatigue(0.25); -- from 0 to 1
 
         IScnHospital.ApplyInjuries();
-        IScnHospital.AddZombies();
 
         print("IScn Difficulty Finished")
 
@@ -121,7 +122,7 @@ IScnHospital.OnNewGame = function(player, square)
         -- Trash Door
         ImmersiveScenarios.addBarricade(12942, 2002, 0, 2, true, 16.0); 
         
-        -- TEST
+        -- TEST. Need a way to harden 1st floor windows. Barricades too unrealistic
         --for x=12924, 12928 do
             --ImmersiveScenarios.hardenWindow(x, 2090, 0, 10.0)
             --ImmersiveScenarios.addBarricade(x, 2090, 0, 1, true, 4.0, "SheetMetal");
@@ -139,23 +140,23 @@ IScnHospital.OnNewGame = function(player, square)
             --ImmersiveScenarios.addBarricade(x, 2090, 0, 1, false, 2.0, "MetalBar");
         --end
 
-        door, key = ImmersiveScenarios.lockDoor(12931, 2035, 2) -- +6
-        door, key = ImmersiveScenarios.lockDoor(12931, 2038, 2)        
-        door, key = ImmersiveScenarios.lockDoor(12958, 2037, 2)
-        door, key = ImmersiveScenarios.lockDoor(12924, 2028, 2)        
-        door, key = ImmersiveScenarios.lockDoor(12948, 2057, 2)
+        ImmersiveScenarios.lockDoor(12931, 2035, 2) -- +6
+        ImmersiveScenarios.lockDoor(12931, 2038, 2)        
+        ImmersiveScenarios.lockDoor(12958, 2037, 2)
+        ImmersiveScenarios.lockDoor(12924, 2028, 2)        
+        ImmersiveScenarios.lockDoor(12948, 2057, 2)
         
-        door, key = ImmersiveScenarios.lockDoor(12930, 2048, 1) -- +3
-        door, key = ImmersiveScenarios.lockDoor(12973, 2023, 1)
-        door, key = ImmersiveScenarios.lockDoor(12971, 2017, 1)
-        door, key = ImmersiveScenarios.lockDoor(12957, 2013, 1)
-        door, key = ImmersiveScenarios.lockDoor(12931, 2050, 1)
+        ImmersiveScenarios.lockDoor(12930, 2048, 1) -- +3
+        ImmersiveScenarios.lockDoor(12973, 2023, 1)
+        ImmersiveScenarios.lockDoor(12971, 2017, 1)
+        ImmersiveScenarios.lockDoor(12957, 2013, 1)
+        ImmersiveScenarios.lockDoor(12931, 2050, 1)
         
-        door, key = ImmersiveScenarios.lockDoor(12955, 2046, 0)
+        ImmersiveScenarios.lockDoor(12955, 2046, 0)
         
-        door, key = ImmersiveScenarios.lockDoor(12968, 2018, 0)
+        ImmersiveScenarios.lockDoor(12968, 2018, 0)
         
-        door, key = ImmersiveScenarios.lockDoor(12960, 2026, 0)
+        ImmersiveScenarios.lockDoor(12960, 2026, 0)
 
         local sq = getCell():getGridSquare(12925, 2041, 2);
         if sq ~= nil then
@@ -180,6 +181,7 @@ IScnHospital.OnNewGame = function(player, square)
             apple:setAge(75);        
         end
 
+        local familyName = ""
         local sq = getCell():getGridSquare(12929, 2043, 2);
         if sq ~= nil then
             local body = createRandomDeadBody(sq, 10);
@@ -194,7 +196,7 @@ IScnHospital.OnNewGame = function(player, square)
                 c:AddItem("Base.Nails");
             end
             local gun = sq:AddWorldInventoryItem("Base.Revolver", 0.9, 0.9, 0.5)
-            gun:setCondition(0);
+            gun:setCondition(0, false);
         end
 
         local sq = getCell():getGridSquare(12928, 2043, 2);
@@ -265,13 +267,15 @@ IScnHospital.OnNewGame = function(player, square)
         iscnModData.powerRestored = false;
         iscnModData.finishScenario = false
         
+        IScnHospital.setSandBoxVars();
+                
+        IScnHospital.AddZombies();                
+        
         -- This executes once at startup and every ten min
         Events.EveryTenMinutes.Add( IScnHospital.EveryTenMin );
         -- Triggers when the player moves
-        Events.OnPlayerMove.Add( IScnHospital.OnPlayerMove );
-
-        IScnHospital.setSandBoxVars();
-                
+        Events.OnPlayerMove.Add( ImmersiveScenarios.OnPlayerMove );
+        
         iscnModData.startconditionsset = true;
 
         pl:playSound("LightBulbAmbiance");
@@ -291,6 +295,9 @@ IScnHospital.EveryTenMin = function()
     local thunder = clim:getThunderStorm();
     thunder:triggerThunderEvent(12929, 2043, true, true, true)
 
+    local sandbox = getSandboxOptions()
+    print(sandbox:getOptionByName("ElecShutModifier"):getValue())
+
     local hoursSurvived = pl:getHoursSurvived()
     if iscnModData.finishScenario then
     
@@ -302,6 +309,7 @@ IScnHospital.EveryTenMin = function()
             print("IScn: Power On Error, Trying Again")
             sandbox:set("ElecShutModifier", elecShutModifier)
             sandbox:toLua()
+            sandbox:updateFromLua()
             sandbox:applySettings()
         else
             -- All Ok
@@ -327,6 +335,7 @@ IScnHospital.EveryTenMin = function()
         local elecShutModifier = iscnModData.sandboxCopy:getOptionByName("ElecShutModifier"):getValue()
         sandbox:set("ElecShutModifier", elecShutModifier)
         sandbox:toLua()
+        sandbox:updateFromLua()
         sandbox:applySettings()
 
         pl:playSound("LightBulbAmbiance");
@@ -346,6 +355,7 @@ IScnHospital.EveryTenMin = function()
         local sandbox = getSandboxOptions()
         sandbox:set("ElecShutModifier", -1)
         sandbox:toLua()
+        sandbox:updateFromLua()
         sandbox:applySettings()     
         
         iscnModData.turnPowerOff = true;
@@ -357,6 +367,7 @@ IScnHospital.EveryTenMin = function()
         local sandbox = getSandboxOptions()
         sandbox:set("ElecShutModifier", -1)
         sandbox:toLua()
+        sandbox:updateFromLua()
         sandbox:applySettings()     
         
         iscnModData.turnPowerOff = false;
@@ -382,6 +393,7 @@ IScnHospital.EveryOneMin = function()
         local elecShutModifier = iscnModData.sandboxCopy:getOptionByName("ElecShutModifier"):getValue()                 
         sandbox:set("ElecShutModifier", elecShutModifier)
         sandbox:toLua()
+        sandbox:updateFromLua()
         sandbox:applySettings()           
 
         iscnModData.turnPowerOff = true
@@ -523,27 +535,15 @@ IScnHospital.AddZombies = function()
         
     local iscnModData = ModData.get("IScnData")
     iscnModData.triggerZombies = {}
-       
+              
     -- Spawn Front of Room
-    local zombieEater = addZombiesInOutfit(12938, 2043, 2, 1, "Doctor", 0):get(0);    
-    local zombieBody = addZombiesInOutfit(12939, 2043, 2, 1, "Nurse", 0.0, true, true, true, true, 10):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 4, "PZ_FemaleBeingEaten_Death", nil, 12930, 2043, 2, 10000});
-               
-    local zombieEater = addZombiesInOutfit(12947, 2053, 2, 1, "HospitalPatient", 0):get(0);    
-    local zombieBody = addZombiesInOutfit(12947, 2053, 2, 1, "HospitalPatient", 0.0, true, true, true, true, 10):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 4, nil, nil, 12947, 2053, 2, 10000});        
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12939, 2043, 2, "Nurse", false)
+    local zombieEater = ImmersiveScenarios.CreateZombieEater(zombieBody, 12938, 2043, 2, "Doctor", 4)    
+    -- Trigger Scream
+    table.insert(iscnModData.triggerZombies, {zombieEater, 12930, 2043, 2, "PZ_FemaleBeingEaten_Death", nil});
+
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12947, 2053, 2, "HospitalPatient")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12947, 2053, 2, "HospitalPatient", 4, nil)
         
     addZombiesInOutfit(12927, 2061, 2, 1, "Nurse", 0); 
     addZombiesInOutfit(12927, 2061, 2, 1, nil, 0); 
@@ -559,43 +559,22 @@ IScnHospital.AddZombies = function()
     addZombiesInOutfit(12955, 2009, 2, 1, "HospitalPatient", 0);
     addZombiesInOutfit(12926, 2024, 2, 1, "Nurse", 0);
             
-    addZombiesInOutfit(12954, 2024, 2, 3, nil, 0);              
+    addZombiesInOutfit(12954, 2024, 2, 3, nil, 0);
             
     -- Second floor recovery room     
     addZombiesInOutfit(12933, 2033, 1, 2, "Doctor", 0);
     addZombiesInOutfit(12933, 2033, 1, 3, "Nurse", 0); 
     addZombiesInOutfit(12933, 2033, 1, 6, "HospitalPatient", 0); 
     
-    local zombieBody = addZombiesInOutfit(12933, 2032, 1, 1, "Nurse", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12933, 2032, 1, 1, "HospitalPatient", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12933, 2032, 1, 10000});
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12933, 2032, 1, "Nurse")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12933, 2032, 1, "HospitalPatient")
     
-    local zombieBody = addZombiesInOutfit(12934, 2034, 1, 1, "Doctor", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12934, 2034, 1, 1, "HospitalPatient", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_FemaleZombieEating", 10, 12934, 2034, 1, 10000});    
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12934, 2034, 1, "Doctor")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12934, 2034, 1, "HospitalPatient")
 
     -- Elevator
-    local zombieBody = addZombiesInOutfit(12933, 2076, 1, 1, "Tourist", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12933, 2076, 1, 1, "TinFoilHat", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12933, 2076, 1, 10000});
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12933, 2076, 1, "Tourist")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12933, 2076, 1, "TinFoilHat")
             
     addZombiesInOutfit(12950, 2060, 1, 2, "Nurse", 0); 
     addZombiesInOutfit(12950, 2060, 1, 2, "HospitalPatient", 0);
@@ -611,15 +590,8 @@ IScnHospital.AddZombies = function()
     addZombiesInOutfit(12985, 2014, 1, 1, "HospitalPatient", 0.0, true, true, true, true, 20);
     addZombiesInOutfit(12986, 2015, 1, 1, "HospitalPatient", 1.0, true, true, true, true, 20);
 
-    local zombieBody = addZombiesInOutfit(12942, 2011, 1, 1, nil, 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12942, 2011, 1, 1, "Punk", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_FemaleZombieEating", 10, 12942, 2011, 1, 10000});
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12942, 2011, 1, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12942, 2011, 1, "Punk")
     
     addZombiesInOutfit(12949, 2010, 0, 1, "Doctor", 0);                 
     addZombiesInOutfit(12949, 2010, 0, 2, "Nurse", 0); 
@@ -635,37 +607,16 @@ IScnHospital.AddZombies = function()
     
     -- Cafeteria First floor
     addZombiesInOutfit(12935, 2016, 0, 8, nil, 0); 
-    local zombieBody = addZombiesInOutfit(12935, 2016, 0, 1, "Classy", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12935, 2016, 0, 1, "Cook_Generic", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12935, 2016, 0, 10000});    
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12935, 2016, 0, "Classy")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12935, 2016, 0, "Cook_Generic")
 
-    local zombieBody = addZombiesInOutfit(12926, 2021, 0, 1, "Classy", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12926, 2021, 0, 1, "Cook_Generic", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12926, 2021, 0, 10000});    
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12926, 2021, 0, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12926, 2021, 0, "Cook_Generic")
     
     -- Waiting Area
     addZombiesInOutfit(12974, 2015, 0, 4, nil, 0); 
-    local zombieBody = addZombiesInOutfit(12974, 2015, 0, 1, "AmbulanceDriver", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12974, 2015, 0, 1, "AmbulanceDriver", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12974, 2015, 0, 10000});        
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12974, 2015, 0, "AmbulanceDriver")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12974, 2015, 0, "AmbulanceDriver")
     
     addZombiesInOutfit(12958, 2014, 0, 3, nil, 0); 
     
@@ -685,46 +636,18 @@ IScnHospital.AddZombies = function()
     addZombiesInOutfit(12966, 2029, 0, 4, "HospitalPatient", 0);        
     
     -- Front Area
-    local zombieBody = addZombiesInOutfit(12928, 2082, 0, 1, "Fisherman", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12928, 2082, 0, 1, "Young", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12928, 2082, 0, 10000});
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12928, 2082, 0, "Fisherman")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12928, 2082, 0, "Young")
     
-    local zombieBody = addZombiesInOutfit(12930, 2082, 0, 1, "Young", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12930, 2082, 0, 1, "WaiterStripper", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_FemaleZombieEating", 10, 12930, 2082, 0, 10000});        
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12930, 2082, 0, "Young")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12930, 2082, 0, "WaiterStripper")
     
     -- Overflow area
-    local zombieBody = addZombiesInOutfit(12964, 2024, 0, 1, "AmbulanceDriver", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12964, 2024, 0, 1, "Cyclist", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12964, 2024, 0, 10000});
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12964, 2024, 0, "AmbulanceDriver")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12964, 2024, 0, "Cyclist")
     
-    local zombieBody = addZombiesInOutfit(12966, 2028, 0, 1, "AmbulanceDriver", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12966, 2028, 0, 1, "Waiter_Classy", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_FemaleZombieEating", 10, 12966, 2028, 0, 10000});    
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12966, 2028, 0, "AmbulanceDriver")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12966, 2028, 0, "Waiter_Classy")
     
     -- Trash Area        
     addZombiesInOutfit(12943, 1997, 0, 1, "Nurse", 0.0, true, false, true, true, 10);
@@ -733,28 +656,14 @@ IScnHospital.AddZombies = function()
     addZombiesInOutfit(12943, 2000, 0, 1, nil, 0.0, true, false, true, true, 10);
     
     addZombiesInOutfit(12944, 1997, 0, 1, nil, 0.0, true, false, true, true, 10);
-    local zombieBody = addZombiesInOutfit(12944, 1998, 0, 1, "Classy", 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12944, 1998, 0, 1, "Doctor", 0):get(0);    
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);  
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_MaleZombieEating", 10, 12944, 1998, 0, 10000});
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12944, 1998, 0, "Classy")
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12944, 1998, 0, "Doctor")
     addZombiesInOutfit(12944, 1999, 0, 1, "Young", 0.0, true, false, true, true, 10);
     addZombiesInOutfit(12944, 2000, 0, 1, "Doctor", 0.0, true, false, true, true, 10);    
     
     addZombiesInOutfit(12945, 1997, 0, 1, "HospitalPatient", 0.0, true, false, true, true, 10);
-    local zombieBody = addZombiesInOutfit(12945, 1998, 0, 1, nil, 0.0, true, false, true, true, 10):get(0);
-    local zombieEater = addZombiesInOutfit(12945, 1998, 0, 1, "Doctor", 0):get(0);
-    zombieBody:addRandomBloodDirtHolesEtc()    
-    zombieEater:setForceEatingAnimation(true);
-    zombieBody:setDir(IsoDirections.W);           
-    zombieBody:setX(zombieEater:getX() + 0.9);
-    zombieBody:setY(zombieEater:getY());    
-    zombieEater:setDir(IsoDirections.E);
-    table.insert(iscnModData.triggerZombies, {zombieEater, 5, "PZ_FemaleZombieEating", 10, 12945, 1998, 0, 10000});
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12945, 1998, 0, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12945, 1998, 0, "Doctor")
     addZombiesInOutfit(12945, 1999, 0, 1, "SportsFan", 0.0, true, false, true, true, 10);
     addZombiesInOutfit(12945, 2000, 0, 1, "HospitalPatient", 0.0, true, false, true, true, 10); 
     
@@ -772,12 +681,13 @@ IScnHospital.AddZombies = function()
     --PZ_FemaleZombieEating
     --PZ_MaleZombieEating
     --------------------
-    --addZombiesInOutfit(x, y, z, count, outfit, femaleChance, crawler, isFallOnFront, isFakeDead, knockedDown, health);
-    --addZombiesInOutfit(12939, 2043, 2, 1, "Nurse", 0.0, true, false, true, true, 10); This Works, dead!
-    --addZombiesInOutfit(12939, 2043, 2, 1, "Doctor", 1.0, true, true, true, true, 1); -- This WORKS dead!
-    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0.0, true, true, false, true, 1); -- This WORKS crawler
-    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0.0, false, false, true, false, 1); -- This WORKS standing!
-    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0.0, false, false, false, true, 10); -- This WORKS standing!
+    --addZombiesInOutfit(x, y, z, count, outfit, Integer femaleChance, crawler, isFallOnFront, isFakeDead, knockedDown, float health);
+    --addZombiesInOutfit(12939, 2043, 2, 1, "Nurse", 100, true, false, true, true, 10); This Works, dead!
+    --addZombiesInOutfit(12939, 2043, 2, 1, "Doctor", 100, true, true, true, true, 1); -- This WORKS dead!
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, true, true, false, true, 1); -- This WORKS crawler
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, false, false, true, false, 1); -- This WORKS standing!
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, false, false, false, true, 10); -- This WORKS standing, turns into fakeDead when killed!
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, false, false, false, false, 10); -- This WORKS standing, but won't turn into fakeDead when killed!
     -------------------
     --local zombieBody = addZombiesInOutfit(12940, 2043, 2, 1, "Party", 0):get(0);         
     --zombieBody2:setBecomeCrawler(true) -- This is working
@@ -790,14 +700,24 @@ IScnHospital.AddZombies = function()
     --zombieBody:setDir(IsoDirections.S);
     -------------------
     --FUNCTIONS OF INTEREST
-    -------------------
+    -------------------    
+    --void addZombieSitting(int x, int y, int z)
+    --void addZombiesEating(int x, int y, int z, int totalZombies, boolean skeletonBody)
+    --IsoDeadBody createRandomDeadBody(IsoGridSquare square, int blood) -- WORKS
+    --zombieBody:Kill(nil) -- Works
+    --Kill(IsoGameCharacter killer, boolean bGory)    
+    --setAlwaysKnockedDown(boolean alwaysKnockedDown)
+    --setCanWalk(boolean bCanStand)
+    --setForceFakeDead(boolean bForceFakeDead)
     --void spotted(IsoMovingObject movingObject, boolean boolean1) -- Works!
     --Wander() -- Maybe
-    --setReanimateTimer(float)
+    --setReanimate(boolean reanimate)
+    --setReanimateTimer(float) - Does not work
     --void setAsSurvivor() -- Didn't do anything    
     --void setCrawler(boolean boolean1) -- Didn't work
     --void setCrawlerType(int int1)
     --void toggleCrawling() -- Didn't work
+    -- setReanimate(false) -- Didn't work
     --addRandomVisualDamages()    
     --boolean shouldGetUpFromCrawl()
     --setSitAgainstWall(boolean boolean1) -- Didn't work        
@@ -805,51 +725,6 @@ IScnHospital.AddZombies = function()
     --void setTargetSeenTime(float float1)        
     --void burnCorpse(IsoDeadBody deadBody)
     
-end
-
-IScnHospital.OnPlayerMove = function(pl)
-
-    local x = math.floor(pl:getX())
-    local y = math.floor(pl:getY())
-    local z = math.floor(pl:getZ())
-
-    local iscnModData = ModData.get("IScnData")
-    for i=#iscnModData.triggerZombies,1,-1 do        
-        local zI = iscnModData.triggerZombies[i]
-        local zomb = zI[1]
-        local zombReleaseDist = zI[2]
-        local zombSoundDist = zI[4]
-        local zombX = zI[5]
-        local zombY = zI[6]
-        local zombZ = zI[7]
-        local zombFinishDist = zI[8]
-        if zombZ == z then
-            local sound = zI[3]
-            if sound ~= nil then
-                if zombSoundDist == nil and x == zombX and y == zombY and z == zombZ then    
-                    print("IScn:Playing Sound "..sound)
-                    getWorld():getFreeEmitter():playSound(sound, zomb:getX(), zomb:getY(), zomb:getZ())
-                    zI[3] = nil
-                elseif zombSoundDist ~= nil and pl:getDistanceSq(zomb) < zombSoundDist then
-                    local sound = zI[3]
-                    print("IScn:Playing Sound "..sound)
-                    getWorld():getFreeEmitter():playSound(sound, zomb:getX(), zomb:getY(), zomb:getZ())                
-                    zI[3] = nil
-                end
-            end
-            if (pl:getDistanceSq(zomb) < zombReleaseDist and z == zombZ) or 
-                pl:getDistanceSq(zomb) > zombFinishDist then
-                zomb:setForceEatingAnimation(false);
-                print("IScn:Releasing Zombie " ..zombX.." "..zombY.." "..zombZ.." "..pl:getDistanceSq(zomb))
-                table.remove(iscnModData.triggerZombies, i)
-            end
-        end
-    end
-     
-    if #iscnModData.triggerZombies == 0 then
-        print("IScn: Finished Zombie Triggers")
-        Events.OnPlayerMove.Remove(IScnHospital.OnPlayerMove)
-    end
 end
 
 IScnHospital.setSandBoxVars = function()
@@ -872,10 +747,10 @@ IScnHospital.setSandBoxVars = function()
     -- else hourvalue = 5 ;
     -- end 
 
-    gt = getGameTime();
-    gt:setTimeOfDay(21);-- Force Nighttime
+    gt = getGameTime();    
     gt:setDay(sandbox:getOptionByName("StartDay"):getValue()-1); -- The night before
     gt:setStartDay(sandbox:getOptionByName("StartDay"):getValue()-1); -- The night before
+    gt:setTimeOfDay(IScnHospital.hourOfDay);
     
     iscnModData.sandboxCopy = SandboxOptions.new()
     iscnModData.sandboxCopy:copyValuesFrom(sandbox) -- Save Sandbox
@@ -885,6 +760,7 @@ IScnHospital.setSandBoxVars = function()
     -- Turn off electricity temporarily
     sandbox:set("ElecShutModifier", -1)
     sandbox:toLua()
+    sandbox:updateFromLua()
     sandbox:applySettings()
     
     print("ElecShutModifier: "..sandbox:getOptionByName("ElecShutModifier"):getValue())
@@ -912,9 +788,14 @@ IScnHospital.OnInitWorld = function()
     print("IScn:OnInitWorld")    
     
     Events.OnInitGlobalModData.Add(IScnHospital.OnInitGlobalModData);    
+    
+    --Events.OnCreatePlayer.Add(IScnHospital.OnCreatePlayer)
 end
 
-IScnHospital.OnCreatePlayer = function()
+IScnHospital.OnCreatePlayer = function(playerIndex, pl)
+    --print("ISCN::TEST")
+    
+    --pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):AddDamage(50);
 end
 
 IScnHospital.RemovePlayer = function(p)
@@ -956,7 +837,7 @@ IScnHospital.spawns = {
         {worldX = xcell, worldY = ycell, posX = x, posY = y, posZ = z}, 
 }
 
-IScnHospital.hourOfDay = 7;
+IScnHospital.hourOfDay = 21; -- Force Nighttime
 
 Events.OnChallengeQuery.Add(IScnHospital.Add)
 

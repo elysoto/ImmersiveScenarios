@@ -213,6 +213,174 @@ ImmersiveScenarios.GetBuildingGridSquares = function(rooms)
     return buildingGridSquares;
 end
 
+ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction, reanimate, reanimateHourOffset, fakeDead, crawling)
+    male = male or true
+    direction = direction or IsoDirections.W
+    reanimate = reanimate or false
+    reanimateHourOffset = reanimateHourOffset or 2
+    fakeDead = fakeDead or true
+    crawling = crawling or false
+
+    local zombie = createZombie(x, y, z, nil, 0, direction);
+    while male ~= zombie:isFemale() do
+        zombie:removeFromWorld();
+        zombie:removeFromSquare();
+        zombie = createZombie(x, y, z, nil, 0, direction);
+    end
+    if outfit == nil then
+        zombie:dressInRandomOutfit()
+    else
+        zombie:dressInNamedOutfit(outfit)
+    end
+    --zombie:getVisual():setSkinTextureIndex(1 to 10 tested);
+    zombie:getVisual():randomBlood()
+    zombie:getVisual():randomDirt()
+    --zombie:getVisual():setHole(BodyPartType.UpperArm_L)
+    zombie:resetModelNextFrame();
+    zombie:DoZombieInventory();
+
+    zombie:addRandomBloodDirtHolesEtc()  
+    
+    for i=0, 7 do
+        zombie:addBlood(nil, false, true, false);
+        zombie:addHole(nil);
+    end    
+    
+    local body = IsoDeadBody.new(zombie, false);
+        
+    if reanimate then
+        if reanimateHourOffset > 0 then
+            body:reanimateLater() -- Reanimates Immediately
+            body:setReanimateTime(GameTime:getInstance():getWorldAgeHours()+reanimateHourOffset) -- based on getWorldAgeHours(), Must be after reanimateLater()
+        else
+            body:reanimate() -- Reanimates instantly
+        end
+        body:setFakeDead(fakeDead)
+        body:setCrawling(crawling)
+    end
+
+    return body
+end
+
+ImmersiveScenarios.CreateZombieEater = function(zombieBody, x, y, z, outfit, distRelease, distSound, distGiveUp, direction, reanimate, reanimateHourOffset, fakeDead, crawling)
+    distRelease = distRelease or 10
+    distSound = distSound or 25
+    distGiveUp = distGiveUp or 100000
+    direction = direction or IsoDirections.E
+    reanimate = reanimate or true
+    reanimateHourOffset = reanimateHourOffset or 2
+    fakeDead = fakeDead or false
+    crawling = crawling or false
+    
+    
+    local iscnModData = ModData.get("IScnData") -- Remove to optimize
+    
+    local zombieEater = addZombiesInOutfit(x, y, z, 1, outfit, 0):get(0);
+    
+    local soundfile = "PZ_MaleZombieEating"
+    if zombieEater:isFemale() then
+        soundfile = "PZ_FemaleZombieEating"
+    end
+    
+    zombieEater:setForceEatingAnimation(true);
+    zombieEater:setDir(IsoDirections.E);
+    
+    --zombieBody:addRandomBloodDirtHolesEtc()  
+    if direction == IsoDirections.N then
+        zombieBody:setDir(IsoDirections.E);           
+        zombieBody:setX(zombieEater:getX());
+        zombieBody:setY(zombieEater:getY() + 0.9);
+    elseif direction == IsoDirections.E then
+        zombieBody:setDir(IsoDirections.E);           
+        zombieBody:setX(zombieEater:getX() + 0.9);
+        zombieBody:setY(zombieEater:getY());
+    elseif direction == IsoDirections.W then
+        zombieBody:setDir(IsoDirections.S);           
+        zombieBody:setX(zombieEater:getX() + 0.9);
+        zombieBody:setY(zombieEater:getY());
+    elseif direction == IsoDirections.S then
+        zombieBody:setDir(IsoDirections.N);           
+        zombieBody:setX(zombieEater:getX() + 0.9);
+        zombieBody:setY(zombieEater:getY());        
+    end
+
+    table.insert(iscnModData.triggerZombies, {zombieEater, x, y, z, soundfile, distSound, distRelease, distGiveUp, zombieBody, reanimate, reanimateHourOffset, fakeDead, crawling});
+    
+    return zombieEater;
+end
+
+ImmersiveScenarios.OnPlayerMove = function(pl)
+
+    local x = math.floor(pl:getX())
+    local y = math.floor(pl:getY())
+    local z = math.floor(pl:getZ())
+
+    local iscnModData = ModData.get("IScnData")
+    for i=#iscnModData.triggerZombies,1,-1 do
+        local zI = iscnModData.triggerZombies[i]
+        local zombEater = zI[1]
+        local triggerX = zI[2]
+        local triggerY = zI[3]
+        local triggerZ = zI[4]    
+        local soundfile = zI[5]
+        local distSound = zI[6]
+        local distRelease = zI[7]        
+        local distGiveUp = zI[8]
+        local zombieBody = zI[9]
+        local reanimate = zI[10]
+        local reanimateHourOffset = zI[11]
+        local fakeDead = zI[12]
+        local crawling = zI[13]        
+               
+        if zombEater == nil then
+            print("IScn:Trigger Error " ..triggerX.." "..triggerY.." "..triggerZ)
+            table.remove(iscnModData.triggerZombies, i)
+        else
+            local dist = pl:getDistanceSq(zombEater)
+        
+            if soundfile ~= nil and distSound == nil then
+                -- Environmental Sound Only
+                distGiveUp = 10000
+                if x == triggerX and y == triggerY and z == triggerZ then
+                    print("IScn:Playing soundfile "..soundfile)
+                    getWorld():getFreeEmitter():playSound(soundfile, zombEater:getX(), zombEater:getY(), zombEater:getZ())
+                    table.remove(iscnModData.triggerZombies, i)    
+                elseif dist > distGiveUp then
+                    table.remove(iscnModData.triggerZombies, i)    
+                end                
+            elseif soundfile ~= nil and distSound ~= nil then
+                if dist < distSound and z == triggerZ then
+                    print("IScn:Playing soundfile "..soundfile)
+                    getWorld():getFreeEmitter():playSound(soundfile, zombEater:getX(), zombEater:getY(), zombEater:getZ())                
+                    zI[5] = nil -- Play sound only once
+                end
+            elseif (dist < distRelease and z == triggerZ) or dist > distGiveUp then
+                
+                zombEater:setForceEatingAnimation(false);
+                
+                if reanimate then
+                    if reanimateHourOffset > 0 then
+                        zombieBody:reanimateLater() -- Reanimates Immediately
+                        zombieBody:setReanimateTime(GameTime:getInstance():getWorldAgeHours()+reanimateHourOffset) -- based on getWorldAgeHours(), Must be after reanimateLater()
+                    else
+                        zombieBody:reanimate() -- Reanimates instantly
+                    end
+                    zombieBody:setFakeDead(fakeDead)
+                    zombieBody:setCrawling(crawling)
+                end                
+                
+                print("IScn:Releasing Zombie " ..triggerX.." "..triggerY.." "..triggerZ.." "..dist)
+                table.remove(iscnModData.triggerZombies, i)
+            end
+        end
+    end
+     
+    if #iscnModData.triggerZombies == 0 then
+        print("IScn: Finished Zombie Triggers")
+        Events.OnPlayerMove.Remove(IScnHospital.OnPlayerMove)
+    end
+end
+
 -- These are the settings.
 IScnModOptions = {
   options = { 
