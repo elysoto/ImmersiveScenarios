@@ -195,6 +195,13 @@ IScnHospital.OnNewGame = function(player, square)
             for i = 0, 3 do
                 c:AddItem("Base.Nails");
             end
+            local mapItem = c:AddItem("IScnHospital_Map_WP");  
+            mapItem:setMapID("IScnHospital_Stash_WP")
+            stash = StashSystem.getStash("IScnHospital_Stash_WP")
+            StashSystem.doStashItem(stash, mapItem)
+            mapItem:setName("West Point : "..mapItem:getDisplayName())
+            mapItem:setCustomName(true)
+            
             local gun = sq:AddWorldInventoryItem("Base.Revolver", 0.9, 0.9, 0.5)
             gun:setCondition(0, false);
         end
@@ -213,6 +220,22 @@ IScnHospital.OnNewGame = function(player, square)
             noteBook:addPage(7, "Day 6:\n\nThe sick people have become monsters. Maybe it's something like rabies. The halls are filled with screams and odd noises. I managed to break apart a chair and boarded up our room so they won't get us. My heart races every time I hear a nearby noise. I spoke to our family on the phone and they aren't doing well either. There is chaos in Rosewood and everyone is panicking. I wish we were with them. I'm just waiting for the police or military or someone to save us.\n\n-"..familyName)
             noteBook:addPage(8, "Day 7:\n\nI've got it. Whatever everyone has, I've got it. I have a fever and my eyesight is getting blurry. There are dozens of crazies in the hallway. I won't turn into them, I've seen what they do. I'm sorry. Maybe it's better you didn't see this. I'll see you in the next life.\n\n-"..familyName)
             noteBook:setName(playerName.."'s Journal");
+        end            
+
+        local sq = getCell():getGridSquare(11129, 6851, 0);
+        if sq ~= nil then
+            local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
+            noteBook:setCanBeWrite(true);
+            
+            noteBook:addPage(1, "What is the world coming to? First poor "..playerName.." gets into a serious car accident and now, people all over town are getting sick.")
+            noteBook:addPage(2, "The family is all heading to Grandma’s farm to try and stay away from everyone else. Seems like the safest place.")
+            noteBook:addPage(3, "Bobby isn’t feeling so well. We put him in his own room and are trying our best to keep his fever down. Joe is going to try and get medicine from town.")
+            noteBook:addPage(4, "Joe went to town and got antibiotics, but he said the Pharmacist was crazy and bit him. He had just grabbed what he could and ran.")
+            noteBook:addPage(5, "Bobby fell asleep. He had a high fever, but now he feels cold.")
+            noteBook:addPage(6, "Bobby woke up but he isn’t right. He keeps lunging at us. We locked him in his room until we can figure out what to do.")
+            noteBook:addPage(7, "God has condemned us. The world has gone mad! Everyone has turned into monsters!")
+            noteBook:addPage(8, playerName.." if you find us, please just run!")
+            noteBook:setName("Family's Note");
         end            
 
         local sq = getCell():getGridSquare(12928, 2043, 2);
@@ -293,9 +316,6 @@ IScnHospital.EveryTenMin = function()
     local clim = getClimateManager()
     local thunder = clim:getThunderStorm();
     thunder:triggerThunderEvent(12929, 2043, true, true, true)
-
-    local sandbox = getSandboxOptions()
-    print(sandbox:getOptionByName("ElecShutModifier"):getValue())
 
     local hoursSurvived = pl:getHoursSurvived()
     if iscnModData.finishScenario then

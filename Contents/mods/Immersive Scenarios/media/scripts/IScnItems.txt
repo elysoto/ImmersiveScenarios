@@ -1,0 +1,14 @@
+module Base {
+
+    item IScnHospital_Map_WP {
+        DisplayCategory     = Cartography,
+        Type				= Map,
+        DisplayName			= West Point (Family Home),
+        Icon				= Map,
+        Weight				= 0.1,
+        Map                 = IScnHospital_Stash_WP,
+        SurvivalGear        = TRUE,
+        WorldStaticModel    = Map,
+    },
+
+}

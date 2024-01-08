@@ -272,7 +272,7 @@ ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction,
 	for i=0, weapons:size() - 1 do
 		local item = weapons:get(i)
         if not item:isHidden() then
-            print("ISCN:Weapon Condition Adjusted")
+            print("IScn:Weapon Condition Adjusted")
             item:setCondition(ZombRand(0,25), false)
 		end
 	end    
@@ -281,7 +281,7 @@ ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction,
 	for i=0, containers:size() - 1 do
 		local item = containers:get(i)
         if not item:isHidden() then
-            print("ISCN:Removed Container")
+            print("IScn:Removed Container")
             inventory:Remove(item)
 		end
 	end
@@ -429,7 +429,7 @@ ImmersiveScenarios.OnPlayerMove = function(pl)
      
     if #iscnModData.triggerZombies == 0 then
         print("IScn: Finished Zombie Triggers")
-        Events.OnPlayerMove.Remove(IScnHospital.OnPlayerMove)
+        Events.OnPlayerMove.Remove(ImmersiveScenarios.OnPlayerMove)
     end
 end
 
