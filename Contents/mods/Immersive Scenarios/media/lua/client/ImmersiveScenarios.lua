@@ -214,12 +214,33 @@ ImmersiveScenarios.GetBuildingGridSquares = function(rooms)
 end
 
 ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction, reanimate, reanimateHourOffset, fakeDead, crawling)
-    male = male or true
-    direction = direction or IsoDirections.W
+    male = male or nil
+    direction = direction or nil
     reanimate = reanimate or false
     reanimateHourOffset = reanimateHourOffset or 2
     fakeDead = fakeDead or true
     crawling = crawling or false
+
+    if male == nil then
+        if ZombRand(2) == 1 then
+            male = true
+        else
+            male = false
+        end
+    end
+
+    if direction == nil then
+        local num = ZombRand(4)
+        if num == 0 then
+            direction = IsoDirections.W
+        elseif num == 1 then
+            direction = IsoDirections.E
+        elseif num == 2 then
+            direction = IsoDirections.S
+        else
+            direction = IsoDirections.N
+        end
+    end
 
     local zombie = createZombie(x, y, z, nil, 0, direction);
     while male ~= zombie:isFemale() do
@@ -233,20 +254,43 @@ ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction,
         zombie:dressInNamedOutfit(outfit)
     end
     --zombie:getVisual():setSkinTextureIndex(1 to 10 tested);
-    zombie:getVisual():randomBlood()
-    zombie:getVisual():randomDirt()
-    --zombie:getVisual():setHole(BodyPartType.UpperArm_L)
-    zombie:resetModelNextFrame();
+    --zombie:resetModelNextFrame();
     zombie:DoZombieInventory();
-
-    zombie:addRandomBloodDirtHolesEtc()  
-    
-    for i=0, 7 do
-        zombie:addBlood(nil, false, true, false);
-        zombie:addHole(nil);
+   
+    for i=0, 20 do
+        -- void addBlood(BloodBodyPartType part, boolean scratched, boolean bitten, boolean allLayers)
+        zombie:addBlood(nil, false, true, true);
+        zombie:addHole(nil, true);
+        zombie:addDirt(nil, nil, true) -- Not Working?
     end    
     
+    zombie:DoCorpseInventory()
+    
+	local inventory = zombie:getInventory()
+
+    local weapons = inventory:getAllCategory("Weapon")
+	for i=0, weapons:size() - 1 do
+		local item = weapons:get(i)
+        if not item:isHidden() then
+            print("ISCN:Weapon Condition Adjusted")
+            item:setCondition(ZombRand(0,25), false)
+		end
+	end    
+    
+    local containers = inventory:getAllCategory("Container")
+	for i=0, containers:size() - 1 do
+		local item = containers:get(i)
+        if not item:isHidden() then
+            print("ISCN:Removed Container")
+            inventory:Remove(item)
+		end
+	end
+    
     local body = IsoDeadBody.new(zombie, false);
+        
+    body:setX(x);
+    body:setY(y);
+    body:setZ(z);
         
     if reanimate then
         if reanimateHourOffset > 0 then
@@ -259,52 +303,58 @@ ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction,
         body:setCrawling(crawling)
     end
 
-    return body
+    return {zombie, body, direction}
 end
 
-ImmersiveScenarios.CreateZombieEater = function(zombieBody, x, y, z, outfit, distRelease, distSound, distGiveUp, direction, reanimate, reanimateHourOffset, fakeDead, crawling)
+ImmersiveScenarios.CreateZombieEater = function(zombieBody, x, y, z, outfit, distRelease, soundfile, distSound, distGiveUp, reanimate, reanimateHourOffset, fakeDead, crawling)
     distRelease = distRelease or 10
-    distSound = distSound or 25
+    soundfile = soundfile or nil
+    distSound = distSound or 30
     distGiveUp = distGiveUp or 100000
-    direction = direction or IsoDirections.E
     reanimate = reanimate or true
     reanimateHourOffset = reanimateHourOffset or 2
     fakeDead = fakeDead or false
     crawling = crawling or false
-    
-    
+        
     local iscnModData = ModData.get("IScnData") -- Remove to optimize
     
     local zombieEater = addZombiesInOutfit(x, y, z, 1, outfit, 0):get(0);
-    
-    local soundfile = "PZ_MaleZombieEating"
-    if zombieEater:isFemale() then
-        soundfile = "PZ_FemaleZombieEating"
-    end
+       
+    -- if soundfile == nil then
+        -- soundfile = "zombieeating"
+        -- -- if zombieEater:isFemale() then
+            -- -- soundfile = "PZ_FemaleZombieEating"
+        -- -- else
+            -- -- soundfile = "PZ_MaleZombieEating"
+        -- -- end
+    -- end
     
     zombieEater:setForceEatingAnimation(true);
-    zombieEater:setDir(IsoDirections.E);
     
-    --zombieBody:addRandomBloodDirtHolesEtc()  
+    direction = zombieBody[3]
     if direction == IsoDirections.N then
-        zombieBody:setDir(IsoDirections.E);           
-        zombieBody:setX(zombieEater:getX());
-        zombieBody:setY(zombieEater:getY() + 0.9);
-    elseif direction == IsoDirections.E then
-        zombieBody:setDir(IsoDirections.E);           
-        zombieBody:setX(zombieEater:getX() + 0.9);
-        zombieBody:setY(zombieEater:getY());
-    elseif direction == IsoDirections.W then
-        zombieBody:setDir(IsoDirections.S);           
-        zombieBody:setX(zombieEater:getX() + 0.9);
-        zombieBody:setY(zombieEater:getY());
+        zombieEater:setDir(IsoDirections.E);
+        zombieEater:setX(x-0.9)
+        zombieEater:setY(y)
+        zombieEater:setZ(z)
     elseif direction == IsoDirections.S then
-        zombieBody:setDir(IsoDirections.N);           
-        zombieBody:setX(zombieEater:getX() + 0.9);
-        zombieBody:setY(zombieEater:getY());        
+        zombieEater:setDir(IsoDirections.W);
+        zombieEater:setX(x+0.5)
+        zombieEater:setY(y-0.5)
+        zombieEater:setZ(z)
+    elseif direction == IsoDirections.E then
+        zombieEater:setDir(IsoDirections.N);
+        zombieEater:setX(x-0.3)
+        zombieEater:setY(y+0.5)
+        zombieEater:setZ(z)
+    elseif direction == IsoDirections.W then
+        zombieEater:setDir(IsoDirections.S);
+        zombieEater:setX(x)
+        zombieEater:setY(y-0.6)
+        zombieEater:setZ(z)      
     end
 
-    table.insert(iscnModData.triggerZombies, {zombieEater, x, y, z, soundfile, distSound, distRelease, distGiveUp, zombieBody, reanimate, reanimateHourOffset, fakeDead, crawling});
+    table.insert(iscnModData.triggerZombies, {zombieEater, x, y, z, soundfile, distSound, distRelease, distGiveUp, zombieBody[2], reanimate, reanimateHourOffset, fakeDead, crawling});
     
     return zombieEater;
 end
@@ -338,12 +388,14 @@ ImmersiveScenarios.OnPlayerMove = function(pl)
         else
             local dist = pl:getDistanceSq(zombEater)
         
-            if soundfile ~= nil and distSound == nil then
+            if soundfile ~= nil and distRelease == nil then
                 -- Environmental Sound Only
                 distGiveUp = 10000
-                if x == triggerX and y == triggerY and z == triggerZ then
+                dist = IsoUtils.DistanceTo(x,y,z,triggerX,triggerY,triggerZ)
+                if (distSound ~= nil and dist < distSound and z == triggerZ) or
+                   (x == triggerX and y == triggerY and z == triggerZ) then
                     print("IScn:Playing soundfile "..soundfile)
-                    getWorld():getFreeEmitter():playSound(soundfile, zombEater:getX(), zombEater:getY(), zombEater:getZ())
+                    zombEater:getEmitter():playSound(soundfile)
                     table.remove(iscnModData.triggerZombies, i)    
                 elseif dist > distGiveUp then
                     table.remove(iscnModData.triggerZombies, i)    

@@ -204,14 +204,14 @@ IScnHospital.OnNewGame = function(player, square)
             local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
             noteBook:setCanBeWrite(true);
         
-            noteBook:addPage(1, "Day 0:\n\nDear Diary,\nI'm so excited to go see my family in Louisville. It's a long 8 hour drive through the night, but I should be able to manage. Can't wait to see them all, especially the little ones. "..familyName.." is going to have a barbeque to celebrate.");
-            noteBook:addPage(2, "Day 1:\n\n"..playerName.." you must have fallen asleep at the wheel and crashed. It was bad and you almost didn't make it. You've been in a coma for a week already. I feel terrible. I've been staying next to you hoping you will wake up. I'm sorry for writing in your journal, but hopefully you will appreciate it.\n\n-"..familyName);
-            noteBook:addPage(3, "Day 2:\n\nIt has been a strange day. Traffic was unusually light and there was a crowd of people at the hospital reception. Some of the family couldn't come visit you because they caught the flu. I think I'll stay the night in your room and keep you company.\n\n-"..familyName);
+            noteBook:addPage(1, "Day 0:\n\nDear Diary,\nI'm so excited to go see my family in Rosewood. It's a long 8 hour drive through the night, but I should be able to manage. Can't wait to see them all, especially the little ones. "..familyName.." is going to have a barbeque to celebrate.");
+            noteBook:addPage(2, "Day 1:\n\n"..playerName.." you must have fallen asleep at the wheel and crashed. It was bad and you almost didn't make it. You've been in a coma for a week already. The doctors are saying that it is wait and see right now. I feel terrible. I've been staying next to you hoping you will wake up. I'm sorry for writing in your journal, but hopefully you will appreciate it.\n\n-"..familyName);
+            noteBook:addPage(3, "Day 2:\n\nIt has been a strange day. Traffic was unusually light from Rosewood and there was a crowd of people at the hospital reception. Some of the family couldn't come visit you because they caught the flu. I think I'll stay the night in your room and keep you company.\n\n-"..familyName);
             noteBook:addPage(4, "Day 3:\n\nThis is crazy. The radio and TV broadcasts have been telling everyone to stay indoors and quarantine. Apparently there is a new highly contagious disease that has been spreading. I'll stay overnight again and make sure you are taken care of. This is scary.\n\n-"..familyName)
             noteBook:addPage(5, "Day 4:\n\nToday the air is heavy with an odd, sour smell, like a mix of dampness and decay. It is eerie, to say the least. I keep looking through the window, hoping for some reassurance, but all I see are empty streets.\n\n-"..familyName);
             noteBook:addPage(6, "Day 5:\n\nAnother day in the hospital. The smell seems to have intensified and there is chaos in the hospital with nurses and doctors running through the halls. I can't find anyone to talk to. I grabbed whatever food I could from the lunchroom and locked myself in your room. I've been hearing the odd screams coming from the hallways.\n\n-"..familyName)
-            noteBook:addPage(7, "Day 6:\n\nThe sick people have become monsters. Maybe it's something like rabies. The halls are filled with screams and odd noises. I managed to break apart a chair and boarded up our room so they won't get us. My heart races every time I hear a nearby noise. I'm just waiting for the police or military or someone to save us.\n\n-"..familyName)
-            noteBook:addPage(8, "Day 7:\n\nI've got it. Whatever everyone has, I've got it. I have a fever and my eyesight is getting blurry. There are dozens of crazies in the hallway. I won't turn into them, I've seen what they do. I'm sorry. I'll see you in the next life.\n\n-"..familyName)
+            noteBook:addPage(7, "Day 6:\n\nThe sick people have become monsters. Maybe it's something like rabies. The halls are filled with screams and odd noises. I managed to break apart a chair and boarded up our room so they won't get us. My heart races every time I hear a nearby noise. I spoke to our family on the phone and they aren't doing well either. There is chaos in Rosewood and everyone is panicking. I wish we were with them. I'm just waiting for the police or military or someone to save us.\n\n-"..familyName)
+            noteBook:addPage(8, "Day 7:\n\nI've got it. Whatever everyone has, I've got it. I have a fever and my eyesight is getting blurry. There are dozens of crazies in the hallway. I won't turn into them, I've seen what they do. I'm sorry. Maybe it's better you didn't see this. I'll see you in the next life.\n\n-"..familyName)
             noteBook:setName(playerName.."'s Journal");
         end            
 
@@ -221,8 +221,7 @@ IScnHospital.OnNewGame = function(player, square)
         end             
         
         local c = ImmersiveScenarios.getContainer(12926, 2040, 2);        
-        if c ~= nil then
-            print("Found a Countainer")
+        if c ~= nil then            
             c:emptyIt(); 
             c:AddItem("Base.Magazine");
             c:AddItem("Base.HandTorch");                    
@@ -537,109 +536,129 @@ IScnHospital.AddZombies = function()
     iscnModData.triggerZombies = {}
               
     -- Spawn Front of Room
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12939, 2043, 2, "Nurse", false)
-    local zombieEater = ImmersiveScenarios.CreateZombieEater(zombieBody, 12938, 2043, 2, "Doctor", 4)    
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12939, 2043, 2, "Nurse", false, IsoDirections.N)
+    local zombieEater = ImmersiveScenarios.CreateZombieEater(zombieBody, 12939, 2043, 2, "Doctor", 4)    
     -- Trigger Scream
     table.insert(iscnModData.triggerZombies, {zombieEater, 12930, 2043, 2, "PZ_FemaleBeingEaten_Death", nil});
 
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12947, 2053, 2, "HospitalPatient")
-    ImmersiveScenarios.CreateZombieEater(zombieBody, 12947, 2053, 2, "HospitalPatient", 4, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12947, 2053, 2, "HospitalPatient", 4, nil, nil)
         
-    addZombiesInOutfit(12927, 2061, 2, 1, "Nurse", 0); 
-    addZombiesInOutfit(12927, 2061, 2, 1, nil, 0); 
+    addZombiesInOutfit(12927, 2061, 2, 1, "Nurse", 50); 
+    addZombiesInOutfit(12927, 2061, 2, 1, nil, 50); 
     
-    addZombiesInOutfit(12947, 2042, 2, 1, "Nurse", 0); 
-    addZombiesInOutfit(12947, 2042, 2, 1, nil, 0);
+    addZombiesInOutfit(12947, 2042, 2, 1, "Nurse", 50); 
+    addZombiesInOutfit(12947, 2042, 2, 1, nil, 50);
             
-    addZombiesInOutfit(12932, 2010, 2, 1, "Doctor", 0);                 
-    addZombiesInOutfit(12932, 2010, 2, 3, "Nurse", 0); 
-    addZombiesInOutfit(12932, 2010, 2, 1, "HospitalPatient", 0);                 
+    addZombiesInOutfit(12932, 2010, 2, 1, "Doctor", 50);                 
+    addZombiesInOutfit(12932, 2010, 2, 3, "Nurse", 50); 
+    addZombiesInOutfit(12932, 2010, 2, 1, "HospitalPatient", 50);                 
             
-    addZombiesInOutfit(12960, 2009, 2, 1, "Doctor", 0);             
-    addZombiesInOutfit(12955, 2009, 2, 1, "HospitalPatient", 0);
-    addZombiesInOutfit(12926, 2024, 2, 1, "Nurse", 0);
-            
-    addZombiesInOutfit(12954, 2024, 2, 3, nil, 0);
+    addZombiesInOutfit(12960, 2009, 2, 1, "Doctor", 50);             
+    addZombiesInOutfit(12955, 2009, 2, 1, "HospitalPatient", 50);
+    addZombiesInOutfit(12926, 2024, 2, 1, "Nurse", 50);
+       
+    -- Front of nursery
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12928, 2019, 2, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12928, 2019, 2, nil)  
+       
+    -- Third floor waiting area
+    addZombiesInOutfit(12954, 2024, 2, 3, nil, 50);
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12945, 2023, 2, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12945, 2023, 2, nil)    
             
     -- Second floor recovery room     
-    addZombiesInOutfit(12933, 2033, 1, 2, "Doctor", 0);
-    addZombiesInOutfit(12933, 2033, 1, 3, "Nurse", 0); 
-    addZombiesInOutfit(12933, 2033, 1, 6, "HospitalPatient", 0); 
+    addZombiesInOutfit(12933, 2033, 1, 2, "Doctor", 50);
+    addZombiesInOutfit(12933, 2033, 1, 3, "Nurse", 50); 
+    addZombiesInOutfit(12933, 2033, 1, 6, "HospitalPatient", 50); 
     
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12933, 2032, 1, "Nurse")
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12933, 2032, 1, "Nurse", false)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12933, 2032, 1, "HospitalPatient")
     
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12934, 2034, 1, "Doctor")
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12934, 2034, 1, "HospitalPatient")
 
     -- Elevator
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12933, 2076, 1, "Tourist")
-    ImmersiveScenarios.CreateZombieEater(zombieBody, 12933, 2076, 1, "TinFoilHat")
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12933, 2077, 1, "Tourist", false, IsoDirections.N)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12933, 2077, 1, "TinFoilHat")
             
-    addZombiesInOutfit(12950, 2060, 1, 2, "Nurse", 0); 
-    addZombiesInOutfit(12950, 2060, 1, 2, "HospitalPatient", 0);
+    addZombiesInOutfit(12950, 2060, 1, 2, "Nurse", 50); 
+    addZombiesInOutfit(12950, 2060, 1, 2, "HospitalPatient", 50);
     
-    addZombiesInOutfit(12952, 2029, 1, 8, "OfficeWorker", 0);
+    addZombiesInOutfit(12952, 2029, 1, 8, "OfficeWorker", 50);
     
-    addZombiesInOutfit(12973, 2021, 1, 2, "OfficeWorkerSkirt", 0);
+    addZombiesInOutfit(12973, 2021, 1, 2, "OfficeWorkerSkirt", 50);
     
-    addZombiesInOutfit(12942, 2011, 1, 3, nil, 0);
+    addZombiesInOutfit(12942, 2011, 1, 3, nil, 50);
     
-    addZombiesInOutfit(12928, 2026, 1, 2, "Doctor", 0);
+    addZombiesInOutfit(12928, 2026, 1, 2, "Doctor", 50);
     
-    addZombiesInOutfit(12985, 2014, 1, 1, "HospitalPatient", 0.0, true, true, true, true, 20);
-    addZombiesInOutfit(12986, 2015, 1, 1, "HospitalPatient", 1.0, true, true, true, true, 20);
+    -- Empty Wing
+    addZombiesInOutfit(12985, 2014, 1, 1, "HospitalPatient", 50, true, true, true, true, 20);
+    addZombiesInOutfit(12986, 2015, 1, 1, "HospitalPatient", 100, true, true, true, true, 20);
+    addZombiesInOutfit(12984, 2024, 1, 1, "HospitalPatient", 50, true, true, true, true, 20);    
+    
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12985, 2024, 1, "Nurse", false)
+    local zombieEater = ImmersiveScenarios.CreateZombieEater(zombieBody, 12985, 2024, 1, "Punk")
 
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12942, 2011, 1, nil)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12942, 2011, 1, "Punk")
     
-    addZombiesInOutfit(12949, 2010, 0, 1, "Doctor", 0);                 
-    addZombiesInOutfit(12949, 2010, 0, 2, "Nurse", 0); 
-    addZombiesInOutfit(12949, 2010, 0, 2, "HospitalPatient", 0);        
+    addZombiesInOutfit(12949, 2010, 0, 1, "Doctor", 50);                 
+    addZombiesInOutfit(12949, 2010, 0, 2, "Nurse", 50); 
+    addZombiesInOutfit(12949, 2010, 0, 2, "HospitalPatient", 50);        
     
-    addZombiesInOutfit(12930, 2048, 0, 3, "OfficeWorker", 0);
+    addZombiesInOutfit(12930, 2048, 0, 3, "OfficeWorker", 50);
             
     -- Morgue
-    addZombiesInOutfit(12957, 2001, 0, 2, "Doctor", 0); 
-    addZombiesInOutfit(12957, 2001, 0, 2, "Nurse", 0); 
-    addZombiesInOutfit(12957, 2001, 0, 5, "HospitalPatient", 0); 
-    addZombiesInOutfit(12957, 2001, 0, 5, nil, 0); 
+    addZombiesInOutfit(12957, 2001, 0, 2, "Doctor", 50); 
+    addZombiesInOutfit(12957, 2001, 0, 2, "Nurse", 50); 
+    addZombiesInOutfit(12957, 2001, 0, 5, "HospitalPatient", 50); 
+    addZombiesInOutfit(12957, 2001, 0, 5, nil, 50); 
     
     -- Cafeteria First floor
-    addZombiesInOutfit(12935, 2016, 0, 8, nil, 0); 
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12935, 2016, 0, "Classy")
+    addZombiesInOutfit(12935, 2016, 0, 8, nil, 50); 
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12935, 2016, 0, "Classy", false, IsoDirections.S)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12935, 2016, 0, "Cook_Generic")
 
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12926, 2021, 0, nil)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12926, 2021, 0, "Cook_Generic")
     
     -- Waiting Area
-    addZombiesInOutfit(12974, 2015, 0, 4, nil, 0); 
+    addZombiesInOutfit(12974, 2015, 0, 4, nil, 50); 
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12974, 2015, 0, "AmbulanceDriver")
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12974, 2015, 0, "AmbulanceDriver")
     
-    addZombiesInOutfit(12958, 2014, 0, 3, nil, 0); 
+    -- Hallway
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12938, 2046, 0, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12938, 2046, 0, nil)
+        
+    -- Toy Store
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12950, 2055, 0, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12950, 2055, 0, nil)    
     
-    addZombiesInOutfit(12959, 2008, 0, 2, "MallSecurity", 0); 
-    addZombiesInOutfit(12952, 2048, 0, 2, "MallSecurity", 0); 
+    addZombiesInOutfit(12958, 2014, 0, 3, nil, 50); 
     
-    addZombiesInOutfit(12931, 2066, 0, 1, "PharmacistM", 0); 
+    addZombiesInOutfit(12959, 2008, 0, 2, "MallSecurity", 50); 
+    addZombiesInOutfit(12952, 2048, 0, 2, "MallSecurity", 50); 
     
-    addZombiesInOutfit(12946, 2053, 0, 1, "PharmacistM", 0); 
-    addZombiesInOutfit(12945, 2049, 0, 1, "PharmacistM", 0); 
-    addZombiesInOutfit(12946, 2059, 0, 6, nil, 0); 
+    addZombiesInOutfit(12931, 2066, 0, 1, "PharmacistM", 50); 
     
-    addZombiesInOutfit(12949, 2074, 0, 4, nil, 0); 
+    addZombiesInOutfit(12946, 2053, 0, 1, "PharmacistM", 50); 
+    addZombiesInOutfit(12945, 2049, 0, 1, "PharmacistM", 50); 
+    addZombiesInOutfit(12946, 2059, 0, 6, nil, 50); 
+    
+    addZombiesInOutfit(12949, 2074, 0, 4, nil, 50); 
 
-    addZombiesInOutfit(12966, 2029, 0, 2, "Doctor", 0);
-    addZombiesInOutfit(12966, 2029, 0, 2, "Nurse", 0); 
-    addZombiesInOutfit(12966, 2029, 0, 4, "HospitalPatient", 0);        
+    addZombiesInOutfit(12966, 2029, 0, 2, "Doctor", 50);
+    addZombiesInOutfit(12966, 2029, 0, 2, "Nurse", 50); 
+    addZombiesInOutfit(12966, 2029, 0, 4, "HospitalPatient", 50);        
     
     -- Front Area
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12928, 2082, 0, "Fisherman")
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12928, 2082, 0, "Fisherman", false, IsoDirections.N)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12928, 2082, 0, "Young")
     
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12930, 2082, 0, "Young")
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12930, 2082, 0, "Young", true, IsoDirections.E)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12930, 2082, 0, "WaiterStripper")
     
     -- Overflow area
@@ -650,27 +669,27 @@ IScnHospital.AddZombies = function()
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12966, 2028, 0, "Waiter_Classy")
     
     -- Trash Area        
-    addZombiesInOutfit(12943, 1997, 0, 1, "Nurse", 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12943, 1998, 0, 1, "Dean", 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12943, 1999, 0, 1, "Cook_IceCream", 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12943, 2000, 0, 1, nil, 0.0, true, false, true, true, 10);
+    addZombiesInOutfit(12943, 1997, 0, 1, "Nurse", 50, true, false, true, true, 10);
+    addZombiesInOutfit(12943, 1998, 0, 1, "Dean", 50, true, false, true, true, 10);
+    addZombiesInOutfit(12943, 1999, 0, 1, "Cook_IceCream", 50, true, false, true, true, 10);
+    addZombiesInOutfit(12943, 2000, 0, 1, nil, 50, true, false, true, true, 10);
     
-    addZombiesInOutfit(12944, 1997, 0, 1, nil, 0.0, true, false, true, true, 10);
+    addZombiesInOutfit(12944, 1997, 0, 1, nil, 50, true, false, true, true, 10);
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12944, 1998, 0, "Classy")
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12944, 1998, 0, "Doctor")
-    addZombiesInOutfit(12944, 1999, 0, 1, "Young", 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12944, 2000, 0, 1, "Doctor", 0.0, true, false, true, true, 10);    
+    addZombiesInOutfit(12944, 1999, 0, 1, "Young", 50, true, false, true, true, 10);
+    addZombiesInOutfit(12944, 2000, 0, 1, "Doctor", 50, true, false, true, true, 10);    
     
-    addZombiesInOutfit(12945, 1997, 0, 1, "HospitalPatient", 0.0, true, false, true, true, 10);
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12945, 1998, 0, nil)
+    addZombiesInOutfit(12945, 1997, 0, 1, "HospitalPatient", 50, true, false, true, true, 10);
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12945, 1998, 0, nil, false)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12945, 1998, 0, "Doctor")
-    addZombiesInOutfit(12945, 1999, 0, 1, "SportsFan", 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12945, 2000, 0, 1, "HospitalPatient", 0.0, true, false, true, true, 10); 
+    addZombiesInOutfit(12945, 1999, 0, 1, "SportsFan", 50, true, false, true, true, 10);
+    addZombiesInOutfit(12945, 2000, 0, 1, "HospitalPatient", 50, true, false, true, true, 10); 
     
-    addZombiesInOutfit(12946, 1997, 0, 1, "HospitalPatient", 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12946, 1998, 0, 1, "Young", 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12946, 1999, 0, 1, nil, 0.0, true, false, true, true, 10);
-    addZombiesInOutfit(12946, 2000, 0, 1, "Redneck", 0.0, true, false, true, true, 10); 
+    addZombiesInOutfit(12946, 1997, 0, 1, "HospitalPatient", 50, true, false, true, true, 10);
+    addZombiesInOutfit(12946, 1998, 0, 1, "Young", 50, true, false, true, true, 10);
+    addZombiesInOutfit(12946, 1999, 0, 1, nil, 50, true, false, true, true, 10);
+    addZombiesInOutfit(12946, 2000, 0, 1, "Redneck", 50, true, false, true, true, 10); 
          
     -------------------
     --TESTING INFO
