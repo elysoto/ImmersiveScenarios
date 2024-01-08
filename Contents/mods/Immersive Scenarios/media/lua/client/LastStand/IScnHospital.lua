@@ -54,9 +54,9 @@ IScnHospital.OnNewGame = function(player, square)
 
         local pl = getPlayer();
         local inv = pl:getInventory();
-        local playerName = pl:getDescriptor():getForename()
-        local iscnModData = ModData.get("IScnData")     
-
+        local iscnModData = ModData.get("IScnData")
+        iscnModData.playerName = pl:getDescriptor():getForename()
+        
         iscnModData.hourOffset = IScnHospital.hourOfDay - 7
 
         --Remove all clothes and give player a hospital gown and socks
@@ -211,32 +211,16 @@ IScnHospital.OnNewGame = function(player, square)
             local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
             noteBook:setCanBeWrite(true);
         
-            noteBook:addPage(1, "Day 0:\n\nDear Diary,\nI'm so excited to go see my family in Rosewood. It's a long 8 hour drive through the night, but I should be able to manage. Can't wait to see them all, especially the little ones. "..familyName.." is going to have a barbeque to celebrate.");
-            noteBook:addPage(2, "Day 1:\n\n"..playerName.." you must have fallen asleep at the wheel and crashed. It was bad and you almost didn't make it. You've been in a coma for a week already. The doctors are saying that it is wait and see right now. I feel terrible. I've been staying next to you hoping you will wake up. I'm sorry for writing in your journal, but hopefully you will appreciate it.\n\n-"..familyName);
-            noteBook:addPage(3, "Day 2:\n\nIt has been a strange day. Traffic was unusually light from Rosewood and there was a crowd of people at the hospital reception. Some of the family couldn't come visit you because they caught the flu. I think I'll stay the night in your room and keep you company.\n\n-"..familyName);
-            noteBook:addPage(4, "Day 3:\n\nThis is crazy. The radio and TV broadcasts have been telling everyone to stay indoors and quarantine. Apparently there is a new highly contagious disease that has been spreading. I'll stay overnight again and make sure you are taken care of. This is scary.\n\n-"..familyName)
+            noteBook:addPage(1, "Day 0:\n\nDear Diary,\nI'm so excited to go see my family in West Point. It's a long 8 hour drive through the night, but I should be able to manage. Can\'t wait to see them all, especially the little ones. "..familyName.." is going to have a barbeque to celebrate.");
+            noteBook:addPage(2, "Day 1:\n\n"..iscnModData.playerName.." you must have fallen asleep at the wheel and crashed. It was bad and you almost didn\'t make it. You\'ve been in a coma for a week already. The doctors are saying that it is wait and see right now. I feel terrible. I\'ve been staying next to you hoping you will wake up. I\'m sorry for writing in your journal, but hopefully you will appreciate it.\n\n-"..familyName);
+            noteBook:addPage(3, "Day 2:\n\nIt has been a strange day. Traffic was unusually light from West Point and there was a crowd of people at the hospital reception. Some of the family couldn\'t come visit you because they caught the flu. I think I\'ll stay the night in your room and keep you company.\n\n-"..familyName);
+            noteBook:addPage(4, "Day 3:\n\nThis is crazy. The radio and TV broadcasts have been telling everyone to stay indoors and quarantine. Apparently there is a new highly contagious disease that has been spreading. I\'ll stay overnight again and make sure you are taken care of. This is scary.\n\n-"..familyName)
             noteBook:addPage(5, "Day 4:\n\nToday the air is heavy with an odd, sour smell, like a mix of dampness and decay. It is eerie, to say the least. I keep looking through the window, hoping for some reassurance, but all I see are empty streets.\n\n-"..familyName);
-            noteBook:addPage(6, "Day 5:\n\nAnother day in the hospital. The smell seems to have intensified and there is chaos in the hospital with nurses and doctors running through the halls. I can't find anyone to talk to. I grabbed whatever food I could from the lunchroom and locked myself in your room. I've been hearing the odd screams coming from the hallways.\n\n-"..familyName)
-            noteBook:addPage(7, "Day 6:\n\nThe sick people have become monsters. Maybe it's something like rabies. The halls are filled with screams and odd noises. I managed to break apart a chair and boarded up our room so they won't get us. My heart races every time I hear a nearby noise. I spoke to our family on the phone and they aren't doing well either. There is chaos in Rosewood and everyone is panicking. I wish we were with them. I'm just waiting for the police or military or someone to save us.\n\n-"..familyName)
-            noteBook:addPage(8, "Day 7:\n\nI've got it. Whatever everyone has, I've got it. I have a fever and my eyesight is getting blurry. There are dozens of crazies in the hallway. I won't turn into them, I've seen what they do. I'm sorry. Maybe it's better you didn't see this. I'll see you in the next life.\n\n-"..familyName)
-            noteBook:setName(playerName.."'s Journal");
-        end            
-
-        local sq = getCell():getGridSquare(11129, 6851, 0);
-        if sq ~= nil then
-            local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
-            noteBook:setCanBeWrite(true);
-            
-            noteBook:addPage(1, "What is the world coming to? First poor "..playerName.." gets into a serious car accident and now, people all over town are getting sick.")
-            noteBook:addPage(2, "The family is all heading to Grandma’s farm to try and stay away from everyone else. Seems like the safest place.")
-            noteBook:addPage(3, "Bobby isn’t feeling so well. We put him in his own room and are trying our best to keep his fever down. Joe is going to try and get medicine from town.")
-            noteBook:addPage(4, "Joe went to town and got antibiotics, but he said the Pharmacist was crazy and bit him. He had just grabbed what he could and ran.")
-            noteBook:addPage(5, "Bobby fell asleep. He had a high fever, but now he feels cold.")
-            noteBook:addPage(6, "Bobby woke up but he isn’t right. He keeps lunging at us. We locked him in his room until we can figure out what to do.")
-            noteBook:addPage(7, "God has condemned us. The world has gone mad! Everyone has turned into monsters!")
-            noteBook:addPage(8, playerName.." if you find us, please just run!")
-            noteBook:setName("Family's Note");
-        end            
+            noteBook:addPage(6, "Day 5:\n\nAnother day in the hospital. The smell seems to have intensified and there is chaos in the hospital with nurses and doctors running through the halls. I can\'t find anyone to talk to. I grabbed whatever food I could from the lunchroom and locked myself in your room. I\'ve been hearing the odd screams coming from the hallways.\n\n-"..familyName)
+            noteBook:addPage(7, "Day 6:\n\nThe sick people have become monsters. Maybe it\'s something like rabies. The halls are filled with screams and odd noises. I managed to break apart a chair and boarded up our room so they won\'t get us. My heart races every time I hear a nearby noise. I spoke to our family on the phone and they aren\'t doing well either. There is chaos in town and everyone is panicking. They all left for Grandpa\'s old farm. I jotted down all the details on my map. I wish we were with them. I\'m just waiting for the police or military or someone to save us.\n\n-"..familyName)
+            noteBook:addPage(8, "Day 7:\n\nI\'ve got it. Whatever everyone has, I\'ve got it. I have a fever and my eyesight is getting blurry. There are dozens of crazies in the hallway. I won\'t turn into them, I\'ve seen what they do. I\'m sorry. Maybe it\'s better you didn\'t see this. I\'ll see you in the next life.\n\n-"..familyName)
+            noteBook:setName(iscnModData.playerName.."\'s Journal");
+        end        
 
         local sq = getCell():getGridSquare(12928, 2043, 2);
         if sq ~= nil then
@@ -295,6 +279,7 @@ IScnHospital.OnNewGame = function(player, square)
         
         -- This executes once at startup and every ten min
         Events.EveryTenMinutes.Add( IScnHospital.EveryTenMin );
+        Events.EveryTenMinutes.Add( IScnHospital.EveryTenMinLoot )
         -- Triggers when the player moves
         Events.OnPlayerMove.Add( ImmersiveScenarios.OnPlayerMove );
         
@@ -302,6 +287,28 @@ IScnHospital.OnNewGame = function(player, square)
 
         pl:playSound("LightBulbAmbiance");
 
+end
+
+IScnHospital.EveryTenMinLoot = function()
+    local sq = getCell():getGridSquare(11129, 6851, 0);
+    if sq ~= nil then
+        local iscnModData = ModData.get("IScnData")
+        local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
+        noteBook:setCanBeWrite(true);
+        
+        noteBook:addPage(1, "What is the world coming to? First poor "..iscnModData.playerName.." gets into a serious car accident and now, people all over town are getting sick.")
+        noteBook:addPage(2, "The family is all heading to Grandpa\'s farm to try and stay away from everyone else. Seems like the safest place.")
+        noteBook:addPage(3, "Bobby isn\’t feeling so well. We put him in his own room and are trying our best to keep his fever down. Joe is going to try and get medicine from town.")
+        noteBook:addPage(4, "Joe went to town and got antibiotics, but he said the Pharmacist was crazy and bit him. He just grabbed what he could and ran.")
+        noteBook:addPage(5, "Bobby fell asleep. He had a high fever, but now he feels cold. Maybe the medicine is working!")
+        noteBook:addPage(6, "Bobby woke up but he isn\'t right. He keeps lunging at us. We locked him in his room until we can figure out what to do.")
+        noteBook:addPage(7, "God has condemned us. The world has gone mad! Everyone has turned into monsters! Everyone is town is running and screaming and there are people eating each other on the streets!")
+        noteBook:addPage(8, "Joe is sick now too. We boarded up the windows and gathered what we could to fight back against the monsters.")
+        noteBook:addPage(9, "God please help us.")
+        noteBook:setName("Family\'s Note");
+        
+        Events.EveryTenMinutes.Remove(IScnHospital.EveryTenMinLoot)
+    end
 end
 
 IScnHospital.EveryTenMin = function()
