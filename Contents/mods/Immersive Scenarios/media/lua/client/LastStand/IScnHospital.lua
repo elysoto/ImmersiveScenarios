@@ -185,6 +185,7 @@ IScnHospital.OnNewGame = function(player, square)
         local sq = getCell():getGridSquare(12929, 2043, 2);
         if sq ~= nil then
             local body = createRandomDeadBody(sq, 10);
+            body:setDir(IsoDirections.N);
             if body:isFemale() then
                 familyName = "Aunt Jane"
             else
@@ -261,7 +262,7 @@ IScnHospital.OnNewGame = function(player, square)
         ImmersiveScenarios.switchLight(12950, 2057, 2, false)
             
         iscnModData.doAlarm = false       
-        if iscnModData.hardMode then            
+        if iscnModData.normalMode or iscnModData.hardMode then            
             iscnModData.doAlarm = true 
         end
         
@@ -435,6 +436,9 @@ IScnHospital.DifficultyCheck = function()
         iscnModData.easyMode = IScnModOptions.options.easyMode
         iscnModData.normalMode = IScnModOptions.options.normalMode
         iscnModData.hardMode = IScnModOptions.options.hardMode
+    else
+        print("IScn: ModOptions unavailable, use normal mode")
+        iscnModData.normalMode = true;
     end  
     
     if IScnModOptions.options.easyMode == nil then
@@ -497,26 +501,28 @@ IScnHospital.ApplyInjuries = function()
     damage = 30 + iscnModData.difficultymodifier;
     injurytime = 35 + iscnModData.injurytimemodifier;
 
-    if iscnModData.normalMode or iscnModData.hardMode then
+    local leg = ZombRand(2)+1;
+    if iscnModData.normalMode then
         print("Adding Leg Injury")
-        -- leg injury
-        local leg = ZombRand(4)+1;
+        -- leg injury       
         if leg == 1 then
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):AddDamage(damage);
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):setFractureTime(injurytime);
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):setSplint(true, .8);
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):setBandaged(true, 5, true, "Base.AlcoholBandage");
-        elseif leg == 2 then
+        else
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):AddDamage(damage);
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):setFractureTime(injurytime);
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):setSplint(true, .8);
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):setBandaged(true, 5, true, "Base.AlcoholBandage");
-        elseif leg == 3 then
+        end
+    elseif iscnModData.hardMode then            
+        if leg == 1 then
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):AddDamage(damage);
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):setFractureTime(injurytime);
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):setSplint(true, .8);
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):setBandaged(true, 5, true, "Base.AlcoholBandage");
-        elseif leg == 4 then
+        else
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_L):AddDamage(damage);
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_L):setFractureTime(injurytime);
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_L):setSplint(true, .8);
