@@ -503,7 +503,6 @@ IScnHospital.ApplyInjuries = function()
 
     local leg = ZombRand(2)+1;
     if iscnModData.normalMode then
-        print("Adding Leg Injury")
         -- leg injury       
         if leg == 1 then
             pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):AddDamage(damage);
@@ -532,7 +531,6 @@ IScnHospital.ApplyInjuries = function()
     
     local arm = ZombRand(2)+1;
     if iscnModData.normalMode then 
-        print("Adding Secondary Arm Injury")
         -- arm injury       
         if arm == 1 then
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_L):AddDamage(damage);
@@ -548,7 +546,6 @@ IScnHospital.ApplyInjuries = function()
     end
     
     if iscnModData.hardMode then
-        print("Adding Primary Arm Injury")
         if arm == 1 then
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_R):AddDamage(damage);
             pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_R):setFractureTime(injurytime);
