@@ -2,7 +2,7 @@
 ImmersiveScenarios = {}
 
 ImmersiveScenarios.getContainer = function(x, y, z)
-    print("IScn:getContainer: " ..x.." "..y.." "..z)
+    DebugLog.log("IScn:getContainer: " ..x.." "..y.." "..z)
     local sq = getCell():getGridSquare(x, y, z);
     if sq ~= nil then
         local objs = sq:getObjects();
@@ -10,7 +10,7 @@ ImmersiveScenarios.getContainer = function(x, y, z)
             local o = objs:get(i);
             local c = o:getContainer();
             if c ~= nil then
-                print("IScn::Found Container " ..x.." "..y.." "..z)
+                DebugLog.log("IScn::Found Container " ..x.." "..y.." "..z)
                 return c;
             end
         end
@@ -20,21 +20,21 @@ end
 
 ImmersiveScenarios.switchLight = function(x, y, z, onOff)
 
-    print("IScn:switchLight: " ..x.." "..y.." "..z)
+    DebugLog.log("IScn:switchLight: " ..x.." "..y.." "..z)
     local sq = getCell():getGridSquare(x, y, z);
     if sq then
         for i=0, sq:getObjects():size() -1 do
             local object = sq:getObjects():get(i);
             if instanceof(object, "IsoLightSwitch") and object:canSwitchLight() and object:isActivated() ~= onOff then
-                --print(object)
+                --DebugLog.log(object)
                 local args = { x = x, y = y, z = z}
-                print("IScn:switchLight::Light Toggled " ..x.." "..y.." "..z)
+                DebugLog.log("IScn:switchLight::Light Toggled " ..x.." "..y.." "..z)
                 sendClientCommand(getPlayer(), 'object', 'toggleLight', args)
                 break
             end
         end
     else
-        print("Square not found "..x.." "..y.." "..z)
+        DebugLog.log("Square not found "..x.." "..y.." "..z)
     end
 end
 
@@ -55,7 +55,7 @@ ImmersiveScenarios.openDoor = function(x,y,z, north)
         end
     end
     if doorClosed == true then
-        print("IScn::openDoor - Door Not Found " ..x.." "..y.." "..z)
+        DebugLog.log("IScn::openDoor - Door Not Found " ..x.." "..y.." "..z)
     end 
 end
 
@@ -68,20 +68,7 @@ ImmersiveScenarios.lockDoor = function(x, y, z)
         for i=0, sq:getObjects():size() -1 do
             obj = sq:getObjects():get(i);
             if instanceof(obj, "IsoDoor") then
-                print("IScn::lockDoor "..x.." "..y.." "..z)
-                --local keyID = obj:checkKeyId()
-                --if keyID == -1 then
-                --  keyID = ZombRand(100000000)
-                --  local key = InventoryItemFactory.CreateItem('Base.Key1')
-                --  obj:setKeyId(keyID)
-                    
-                    --local buildingDef = getPlayer():getCurrentBuildingDef();
-                    --local square = BuildingHelper.getFreeTileFromBuilding(buildingDef)
-                    --square:AddWorldInventoryItem(key, 0.5, 0.5, 0);
-                --  print("IScn::Generated Key")
-                    --local door = sq:getDoor(north);
-                    --obj:setLockedByKey(door:isLocked());                
-                --end             
+                DebugLog.log("IScn::lockDoor "..x.." "..y.." "..z)  
                 obj:getProperties():Set("forceLocked", "true")
                 obj:setLocked(true);
                 doorLocked = true
@@ -89,10 +76,10 @@ ImmersiveScenarios.lockDoor = function(x, y, z)
             end
         end
     else
-        print("Square not found "..x.." "..y.." "..z)       
+        DebugLog.log("Square not found "..x.." "..y.." "..z)       
     end
     if doorLocked == false then
-        print("IScn::lockDoor - Door Not Found " ..x.." "..y.." "..z)
+        DebugLog.log("IScn::lockDoor - Door Not Found " ..x.." "..y.." "..z)
     end
 end
 
@@ -103,7 +90,7 @@ ImmersiveScenarios.unlockDoor = function(x, y, z)
         for i=0, sq:getObjects():size() -1 do
             local obj = sq:getObjects():get(i);
             if instanceof(obj, "IsoDoor") then
-                print("IScn::unlockDoor "..x.." "..y.." "..z)
+                DebugLog.log("IScn::unlockDoor "..x.." "..y.." "..z)
                 obj:getProperties():Set("forceLocked", "false")
                 obj:setLockedByKey(false);
                 obj:setLocked(false);
@@ -112,10 +99,10 @@ ImmersiveScenarios.unlockDoor = function(x, y, z)
             end
         end
     else
-        print("Square not found "..x.." "..y.." "..z)       
+        DebugLog.log("Square not found "..x.." "..y.." "..z)       
     end
     if doorLocked == true then
-        print("IScn::unlockDoor - Door Not Found " ..x.." "..y.." "..z)
+        DebugLog.log("IScn::unlockDoor - Door Not Found " ..x.." "..y.." "..z)
     end    
 end
 
@@ -129,20 +116,20 @@ ImmersiveScenarios.hardenWindow = function(x, y, z, healthMult)
             local o = sq:getObjects():get(i);            
             if instanceof(o, "IsoWindow") then        
                 --local health = o:makeWindowInvincible)
-                --print(o.MaxHealth)
-                --print(o.Health)
+                --DebugLog.log(o.MaxHealth)
+                --DebugLog.log(o.Health)
                 --mat:setCondition(health * healthMult)                
-                print("IScn::hardenWindow "..x.." "..y.." "..z)
-                print("Does not work yet")
+                DebugLog.log("IScn::hardenWindow "..x.." "..y.." "..z)
+                DebugLog.log("Does not work yet")
                 objFound = true             
                 break;
             end
         end
     else
-        print("Square not found "..x.." "..y.." "..z)
+        DebugLog.log("Square not found "..x.." "..y.." "..z)
     end
     if objFound == false then
-        print("IScn::hardenWindow - Obj Not Found " ..x.." "..y.." "..z)
+        DebugLog.log("IScn::hardenWindow - Obj Not Found " ..x.." "..y.." "..z)
     end
 end
 
@@ -161,7 +148,7 @@ ImmersiveScenarios.addBarricade = function(x, y, z, num, faceAway, healthMult, m
                     local mat = InventoryItemFactory.CreateItem('Base.'..material)
                     local health = mat:getCondition()
                     mat:setCondition(health * healthMult)
-                    print("IScn::Barricade "..material.." "..mat:getCondition().." @"..x.." "..y.." "..z)
+                    DebugLog.log("IScn::Barricade "..material.." "..mat:getCondition().." @"..x.." "..y.." "..z)
                     if material == 'MetalBar' then
                         barricade:addMetalBar(getPlayer(), mat)          
                     elseif material == 'SheetMetal' then
@@ -177,10 +164,10 @@ ImmersiveScenarios.addBarricade = function(x, y, z, num, faceAway, healthMult, m
             end
         end
     else
-        print("Square not found "..x.." "..y.." "..z)
+        DebugLog.log("Square not found "..x.." "..y.." "..z)
     end
     if objFound == false then
-        print("IScn::addBarricade - Obj Not Found " ..x.." "..y.." "..z)
+        DebugLog.log("IScn::addBarricade - Obj Not Found " ..x.." "..y.." "..z)
     end
 end
 
@@ -272,7 +259,7 @@ ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction,
 	for i=0, weapons:size() - 1 do
 		local item = weapons:get(i)
         if not item:isHidden() then
-            print("IScn:Weapon Condition Adjusted")
+            DebugLog.log("IScn:Weapon Condition Adjusted")
             item:setCondition(ZombRand(0,25), false)
 		end
 	end    
@@ -281,7 +268,7 @@ ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction,
 	for i=0, containers:size() - 1 do
 		local item = containers:get(i)
         if not item:isHidden() then
-            print("IScn:Removed Container")
+            DebugLog.log("IScn:Removed Container")
             inventory:Remove(item)
 		end
 	end
@@ -328,35 +315,168 @@ ImmersiveScenarios.CreateZombieEater = function(zombieBody, x, y, z, outfit, dis
             -- -- soundfile = "PZ_MaleZombieEating"
         -- -- end
     -- end
-    
+       
     zombieEater:setForceEatingAnimation(true);
     
     direction = zombieBody[3]
+    local zX = nil
+    local zY = nil
+    local zZ = nil
     if direction == IsoDirections.N then
         zombieEater:setDir(IsoDirections.E);
+        zX = x-0.9
+        zY = y
+        zZ = z
+        zombieEater:setX(zX)
+        zombieEater:setY(zY)
+        zombieEater:setZ(zZ)         
         zombieEater:setX(x-0.9)
         zombieEater:setY(y)
         zombieEater:setZ(z)
     elseif direction == IsoDirections.S then
         zombieEater:setDir(IsoDirections.W);
-        zombieEater:setX(x+0.5)
-        zombieEater:setY(y-0.5)
-        zombieEater:setZ(z)
+        zX = x+0.5
+        zY = y-0.5
+        zZ = z
+        zombieEater:setX(zX)
+        zombieEater:setY(zY)
+        zombieEater:setZ(zZ)
     elseif direction == IsoDirections.E then
         zombieEater:setDir(IsoDirections.N);
-        zombieEater:setX(x-0.3)
-        zombieEater:setY(y+0.5)
-        zombieEater:setZ(z)
+        zX = x-0.3
+        zY = y+0.5
+        zZ = z
+        zombieEater:setX(zX)
+        zombieEater:setY(zY)
+        zombieEater:setZ(zZ)
     elseif direction == IsoDirections.W then
         zombieEater:setDir(IsoDirections.S);
-        zombieEater:setX(x)
-        zombieEater:setY(y-0.6)
-        zombieEater:setZ(z)      
+        zX = x
+        zY = y-0.6
+        zZ = z
+        zombieEater:setX(zX)
+        zombieEater:setY(zY)
+        zombieEater:setZ(zZ)      
     end
-
-    table.insert(iscnModData.triggerZombies, {zombieEater, x, y, z, soundfile, distSound, distRelease, distGiveUp, zombieBody[2], reanimate, reanimateHourOffset, fakeDead, crawling});
+    
+    local bX = zombieBody[2]:getX()
+    local bY = zombieBody[2]:getY()
+    local bZ = zombieBody[2]:getZ()
+    
+    table.insert(iscnModData.triggers, {
+        {x, y, z, soundfile, zX, zY, zZ, distSound}, 
+        {zombieEater, zX, zY, zZ, distRelease, distGiveUp}, 
+        {zombieBody[2], bX, bY, bZ,
+        reanimate, reanimateHourOffset, fakeDead, crawling}
+        });
     
     return zombieEater;
+end
+
+ImmersiveScenarios.CreateSoundTrigger = function(x, y, z, soundfile, sX, sY, sZ, distSound)
+    local iscnModData = ModData.get("IScnData") -- Remove to optimize
+        
+    table.insert(iscnModData.triggers, {{x, y, z, soundfile, sX, sY, sZ, distSound}, nil, nil});
+end
+
+ImmersiveScenarios.LoadTriggers = function()
+
+    local iscnModData = ModData.get("IScnData")
+    for i=#iscnModData.triggers,1,-1 do
+        local zI = iscnModData.triggers[i]
+        
+        local triggerX = nil
+        local triggerY = nil
+        local triggerZ = nil
+        local soundfile = nil
+        local sX = nil
+        local sY = nil
+        local sZ = nil
+        local distSound = nil
+
+        local zombEater = nil
+        local zX = nil
+        local zY = nil
+        local zZ = nil   
+        local distRelease = nil   
+        local distGiveUp = nil
+
+        local zombieBody = nil
+        local bX = nil
+        local bY = nil
+        local bZ = nil           
+        local reanimate = nil
+        local reanimateHourOffset = nil
+        local fakeDead = nil
+        local crawling = nil    
+        
+        local soundTable = zI[1]
+        if soundTable ~= nil then
+            triggerX = soundTable[1]
+            triggerY = soundTable[2]
+            triggerZ = soundTable[3]
+            soundfile = soundTable[4]
+            sX = soundTable[5]
+            sY = soundTable[6]
+            sZ = soundTable[7]
+            distSound = soundTable[8]
+        end
+        
+        local zombTable = zI[2]
+        if zombTable ~= nil then
+            zombEater = zombTable[1]
+            zX = zombTable[2]
+            zY = zombTable[3]
+            zZ = zombTable[4]        
+            distRelease = zombTable[5]        
+            distGiveUp = zombTable[6]
+        end
+        
+        local bodyTable = zI[3]
+        if bodyTable ~= nil then
+            zombieBody = bodyTable[1]
+            bX = bodyTable[2]
+            bY = bodyTable[3]
+            bZ = bodyTable[4]           
+            reanimate = bodyTable[5]
+            reanimateHourOffset = bodyTable[6]
+            fakeDead = bodyTable[7]
+            crawling = bodyTable[8]
+        end
+                
+        if zombTable ~= nil then
+            local foundEater = false
+            local foundBody = false
+            local sq = getCell():getGridSquare(zX, zY, zZ);
+            if sq ~= nil then
+                zombieEater = sq:getZombie();
+                if zombieEater ~= nil then
+                    zombTable[1] = zombieEater
+                    zombieEater:setForceEatingAnimation(true);
+                    DebugLog.log("IScn::Found ZombEater " ..zX.." "..zY.." "..zZ)
+                    foundEater = true
+                end
+            end
+
+            local sq = getCell():getGridSquare(bX, bY, bZ);
+            if sq ~= nil then                                
+                local bodies = sq:getDeadBodys();
+                for bI=bodies:size()-1,0,-1 do
+                    local body = bodies:get(bI);
+                    if body then
+                        bodyTable[1] = body
+                        DebugLog.log("IScn::Found ZombBody " ..bX.." "..bY.." "..bZ)
+                        foundBody = true
+                    end
+                end
+            end
+
+            if foundEater == false or foundBody == false then
+                DebugLog.log("IScn::Trigger not loaded " ..bX.." "..bY.." "..bZ)
+                table.remove(iscnModData.triggers, i)
+            end            
+        end
+    end
 end
 
 ImmersiveScenarios.OnPlayerMove = function(pl)
@@ -366,45 +486,88 @@ ImmersiveScenarios.OnPlayerMove = function(pl)
     local z = math.floor(pl:getZ())
 
     local iscnModData = ModData.get("IScnData")
-    for i=#iscnModData.triggerZombies,1,-1 do
-        local zI = iscnModData.triggerZombies[i]
-        local zombEater = zI[1]
-        local triggerX = zI[2]
-        local triggerY = zI[3]
-        local triggerZ = zI[4]    
-        local soundfile = zI[5]
-        local distSound = zI[6]
-        local distRelease = zI[7]        
-        local distGiveUp = zI[8]
-        local zombieBody = zI[9]
-        local reanimate = zI[10]
-        local reanimateHourOffset = zI[11]
-        local fakeDead = zI[12]
-        local crawling = zI[13]        
+    for i=#iscnModData.triggers,1,-1 do
+        local zI = iscnModData.triggers[i]
+
+        local triggerX = nil
+        local triggerY = nil
+        local triggerZ = nil
+        local soundfile = nil
+        local sX = nil
+        local sY = nil
+        local sZ = nil
+        local distSound = nil
+
+        local zombEater = nil
+        local zX = nil
+        local zY = nil
+        local zZ = nil   
+        local distRelease = nil   
+        local distGiveUp = nil
+
+        local zombieBody = nil
+        local bX = nil
+        local bY = nil
+        local bZ = nil           
+        local reanimate = nil
+        local reanimateHourOffset = nil
+        local fakeDead = nil
+        local crawling = nil    
+        
+        local soundTable = zI[1]
+        if soundTable ~= nil then
+            triggerX = soundTable[1]
+            triggerY = soundTable[2]
+            triggerZ = soundTable[3]
+            soundfile = soundTable[4]
+            sX = soundTable[5]
+            sY = soundTable[6]
+            sZ = soundTable[7]
+            distSound = soundTable[8]
+        end
+        
+        local zombTable = zI[2]
+        if zombTable ~= nil then
+            zombEater = zombTable[1]
+            zX = zombTable[2]
+            zY = zombTable[3]
+            zZ = zombTable[4]        
+            distRelease = zombTable[5]        
+            distGiveUp = zombTable[6]
+        end
+        
+        local bodyTable = zI[3]
+        if bodyTable ~= nil then
+            zombieBody = bodyTable[1]
+            bX = bodyTable[2]
+            bY = bodyTable[3]
+            bZ = bodyTable[4]           
+            reanimate = bodyTable[5]
+            reanimateHourOffset = bodyTable[6]
+            fakeDead = bodyTable[7]
+            crawling = bodyTable[8]
+        end  
                
-        if zombEater == nil then
-            print("IScn:Trigger Error " ..triggerX.." "..triggerY.." "..triggerZ)
-            table.remove(iscnModData.triggerZombies, i)
+        if zombTable == nil then
+            -- Environmental Sound Only
+            distGiveUp = 10000
+            dist = IsoUtils.DistanceTo(x,y,z,triggerX,triggerY,triggerZ)
+            if (dist < distSound and z == triggerZ) then
+                DebugLog.log("IScn:Playing soundfile "..soundfile)
+                --zombEater:getEmitter():playSound(soundfile)
+                getWorld():getFreeEmitter():playSound(soundfile, sX, sY, sZ)
+                table.remove(iscnModData.triggers, i)    
+            elseif dist > distGiveUp then
+                table.remove(iscnModData.triggers, i)    
+            end
         else
             local dist = pl:getDistanceSq(zombEater)
         
-            if soundfile ~= nil and distRelease == nil then
-                -- Environmental Sound Only
-                distGiveUp = 10000
-                dist = IsoUtils.DistanceTo(x,y,z,triggerX,triggerY,triggerZ)
-                if (distSound ~= nil and dist < distSound and z == triggerZ) or
-                   (x == triggerX and y == triggerY and z == triggerZ) then
-                    print("IScn:Playing soundfile "..soundfile)
-                    zombEater:getEmitter():playSound(soundfile)
-                    table.remove(iscnModData.triggerZombies, i)    
-                elseif dist > distGiveUp then
-                    table.remove(iscnModData.triggerZombies, i)    
-                end                
-            elseif soundfile ~= nil and distSound ~= nil then
+            if soundfile ~= nil and distSound ~= nil then
                 if dist < distSound and z == triggerZ then
-                    print("IScn:Playing soundfile "..soundfile)
+                    DebugLog.log("IScn:Playing soundfile "..soundfile)
                     getWorld():getFreeEmitter():playSound(soundfile, zombEater:getX(), zombEater:getY(), zombEater:getZ())                
-                    zI[5] = nil -- Play sound only once
+                    soundTable[4] = nil -- Play sound only once
                 end
             elseif (dist < distRelease and z == triggerZ) or dist > distGiveUp then
                 
@@ -421,14 +584,14 @@ ImmersiveScenarios.OnPlayerMove = function(pl)
                     zombieBody:setCrawling(crawling)
                 end                
                 
-                print("IScn:Releasing Zombie " ..triggerX.." "..triggerY.." "..triggerZ.." "..dist)
-                table.remove(iscnModData.triggerZombies, i)
+                DebugLog.log("IScn:Releasing Zombie " ..zX.." "..zY.." "..zZ.." "..dist)
+                table.remove(iscnModData.triggers, i)
             end
         end
     end
      
-    if #iscnModData.triggerZombies == 0 then
-        print("IScn: Finished Zombie Triggers")
+    if #iscnModData.triggers == 0 then
+        DebugLog.log("IScn: Finished Zombie Triggers")
         Events.OnPlayerMove.Remove(ImmersiveScenarios.OnPlayerMove)
     end
 end
@@ -484,9 +647,9 @@ end
 
 -- Check actual options at game loading.
 Events.OnGameStart.Add(function()
-    print("Easy Mode = ", IScnModOptions.options.easyMode)
-    print("Normal Mode = ", IScnModOptions.options.normalMode)
-    print("Hard Mode = ", IScnModOptions.options.hardMode)
+    DebugLog.log("Easy Mode = "..  tostring(IScnModOptions.options.easyMode))
+    DebugLog.log("Normal Mode = ".. tostring(IScnModOptions.options.normalMode))
+    DebugLog.log("Hard Mode = ".. tostring(IScnModOptions.options.hardMode))
 end)
 
 local orig_clickPlay = NewGameScreen.clickPlay

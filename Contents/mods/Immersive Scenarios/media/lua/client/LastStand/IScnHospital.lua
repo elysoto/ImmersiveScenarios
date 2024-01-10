@@ -18,7 +18,7 @@ IScnHospital.OnGameStart = function()
             iscnModData.powerRestored = false
             iscnModData.minCounter = 0
             iscnModData.hoursUntilPower = 12
-            elecShutModifier = ZombRand(15,45)
+            iscnModData.elecShutModifier = ZombRand(15,45)
         else
             -- Scenario inactive
             print("IScn:Scenarios Inactive")
@@ -33,13 +33,18 @@ IScnHospital.OnGameStart = function()
         return;
     end
         
+    if iscnModData.elecShutModifier == nil then
+        iscnModData.elecShutModifier = ZombRand(15,45)
+    end
+
     --check if it's a new game      
     if iscnModData.startconditionsset ~= true and getPlayer():getHoursSurvived() <=1 then
         print("IScnHospital:OnGameStart - New Game")
         Events.OnGameStart.Add(IScnHospital.OnNewGame);
     elseif iscnModData.startconditionsset and iscnModData.powerRestored ~= true then        
         print("IScnHospital:Loading Scenario Event")
-        Events.EveryTenMinutes.Add( IScnHospital.EveryTenMin );
+        ImmersiveScenarios.LoadTriggers();
+        IScnHospital.EnableEvents();
     else
         print("IScnHospital:Unknown Condition")
     end
@@ -76,7 +81,7 @@ IScnHospital.OnNewGame = function(player, square)
 
         IScnHospital.ApplyInjuries();
 
-        print("IScn Difficulty Finished")
+        DebugLog.log("IScn Difficulty Finished")
 
         ImmersiveScenarios.addBarricade(12931, 2043, 2, 4, true); -- Spawn Room
         ImmersiveScenarios.unlockDoor(12931, 2043, 2); -- Spawn Room
@@ -264,10 +269,9 @@ IScnHospital.OnNewGame = function(player, square)
         iscnModData.doAlarm = false       
         if iscnModData.normalMode or iscnModData.hardMode then            
             iscnModData.doAlarm = true 
-        end
+        end        
         
-        iscnModData.hospitalBldgDef = pl:getCurrentBuildingDef();
-
+        iscnModData.journalSpawned = false
         iscnModData.earlyFlicker = math.floor(iscnModData.hoursUntilPower/2)
         iscnModData.lastFlicker = iscnModData.hoursUntilPower-ZombRand(2,3)
         iscnModData.turnPowerOff = false;
@@ -278,11 +282,7 @@ IScnHospital.OnNewGame = function(player, square)
                 
         IScnHospital.AddZombies();                
         
-        -- This executes once at startup and every ten min
-        Events.EveryTenMinutes.Add( IScnHospital.EveryTenMin );
-        Events.EveryTenMinutes.Add( IScnHospital.EveryTenMinLoot )
-        -- Triggers when the player moves
-        Events.OnPlayerMove.Add( ImmersiveScenarios.OnPlayerMove );
+        IScnHospital.EnableEvents();
         
         iscnModData.startconditionsset = true;
 
@@ -290,31 +290,44 @@ IScnHospital.OnNewGame = function(player, square)
 
 end
 
+IScnHospital.EnableEvents = function()
+    -- This executes once at startup and every ten min
+    Events.EveryTenMinutes.Add( IScnHospital.EveryTenMin );
+    Events.EveryTenMinutes.Add( IScnHospital.EveryTenMinLoot )
+    -- Triggers when the player moves
+    Events.OnPlayerMove.Add( ImmersiveScenarios.OnPlayerMove );
+end
+
 IScnHospital.EveryTenMinLoot = function()
     local sq = getCell():getGridSquare(11129, 6851, 0);
     if sq ~= nil then
         local iscnModData = ModData.get("IScnData")
-        local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
-        noteBook:setCanBeWrite(true);
         
-        noteBook:addPage(1, "What is the world coming to? First poor "..iscnModData.playerName.." gets into a serious car accident and now, people all over town are getting sick.")
-        noteBook:addPage(2, "The family is all heading to Grandpa\'s farm to try and stay away from everyone else. Seems like the safest place.")
-        noteBook:addPage(3, "Bobby isn\’t feeling so well. We put him in his own room and are trying our best to keep his fever down. Joe is going to try and get medicine from town.")
-        noteBook:addPage(4, "Joe went to town and got antibiotics, but he said the Pharmacist was crazy and bit him. He just grabbed what he could and ran.")
-        noteBook:addPage(5, "Bobby fell asleep. He had a high fever, but now he feels cold. Maybe the medicine is working!")
-        noteBook:addPage(6, "Bobby woke up but he isn\'t right. He keeps lunging at us. We locked him in his room until we can figure out what to do.")
-        noteBook:addPage(7, "God has condemned us. The world has gone mad! Everyone has turned into monsters! Everyone is town is running and screaming and there are people eating each other on the streets!")
-        noteBook:addPage(8, "Joe is sick now too. We boarded up the windows and gathered what we could to fight back against the monsters.")
-        noteBook:addPage(9, "God please help us.")
-        noteBook:setName("Family\'s Note");
-        
-        Events.EveryTenMinutes.Remove(IScnHospital.EveryTenMinLoot)
+        if iscnModData.journalSpawned ~= true then
+            local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
+            noteBook:setCanBeWrite(true);
+            
+            noteBook:addPage(1, "What is the world coming to? First poor "..iscnModData.playerName.." gets into a serious car accident and now, people all over town are getting sick.")
+            noteBook:addPage(2, "The family is all heading to Grandpa\'s farm to try and stay away from everyone else. Seems like the safest place.")
+            noteBook:addPage(3, "Bobby isn\’t feeling so well. We put him in his own room and are trying our best to keep his fever down. Joe is going to try and get medicine from town.")
+            noteBook:addPage(4, "Joe went to town and got antibiotics, but he said the Pharmacist was crazy and bit him. He just grabbed what he could and ran.")
+            noteBook:addPage(5, "Bobby fell asleep. He had a high fever, but now he feels cold. Maybe the medicine is working!")
+            noteBook:addPage(6, "Bobby woke up but he isn\'t right. He keeps lunging at us. We locked him in his room until we can figure out what to do.")
+            noteBook:addPage(7, "God has condemned us. The world has gone mad! Everyone has turned into monsters! Everyone is town is running and screaming and there are people eating each other on the streets!")
+            noteBook:addPage(8, "Joe is sick now too. We boarded up the windows and gathered what we could to fight back against the monsters.")
+            noteBook:addPage(9, "God please help us.")
+            noteBook:setName("Family\'s Note");
+            
+            iscnModData.journalSpawned = true
+            
+            Events.EveryTenMinutes.Remove(IScnHospital.EveryTenMinLoot)
+        end
     end
 end
 
 IScnHospital.EveryTenMin = function()
     -- This executes once at startup and every ten min
-    print("IScn::EveryTenMin")
+    DebugLog.log("IScn::EveryTenMin")
 
     local pl = getPlayer();
     local iscnModData = ModData.get("IScnData")
@@ -329,12 +342,11 @@ IScnHospital.EveryTenMin = function()
     if iscnModData.finishScenario then
     
         local sandbox = getSandboxOptions()
-        local elecShutModifier = iscnModData.sandboxCopy:getOptionByName("ElecShutModifier"):getValue()
         -- Error Checking
-        if sandbox:getOptionByName("ElecShutModifier"):getValue() ~= elecShutModifier then
+        if sandbox:getOptionByName("ElecShutModifier"):getValue() ~= iscnModData.elecShutModifier then
             -- Error, didn't take try again
             print("IScn: Power On Error, Trying Again")
-            sandbox:set("ElecShutModifier", elecShutModifier)
+            sandbox:set("ElecShutModifier", iscnModData.elecShutModifier)
             sandbox:toLua()
             sandbox:updateFromLua()
             sandbox:applySettings()
@@ -342,8 +354,25 @@ IScnHospital.EveryTenMin = function()
             -- All Ok
             print("IScn: Finishing Scenario")
             if iscnModData.doAlarm then
-                if iscnModData.hospitalBldgDef then
-                    iscnModData.hospitalBldgDef:setAlarmed(true);
+                DebugLog.log("IScn::doAlarm")
+                -- local sq = getCell():getGridSquare(12931,2043, 0);
+                -- if sq ~= nil then
+                    -- DebugLog.log("IScn::sq OK")
+                    -- --sq:getBuilding():TriggerAlarm()
+                    -- hospitalBldgDef = sq:getBuilding():getDef()
+                    -- if hospitalBldgDef then
+                        -- DebugLog.log("IScn::Enabling Alarm")
+                        -- hospitalBldgDef:setAlarmed(true);
+                    -- else
+                        -- DebugLog.log("IScn::Alarm Error, Hospital not found")
+                    -- end
+                -- end
+                hospitalBldgDef = getWorld():getMetaGrid():getBuildingAt(12931,2043)                
+                if hospitalBldgDef then
+                    DebugLog.log("IScn::Enabling Alarm")
+                    hospitalBldgDef:setAlarmed(true);
+                else
+                    print("IScn::Alarm Error, Hospital not found")
                 end                
             end
 
@@ -359,8 +388,7 @@ IScnHospital.EveryTenMin = function()
         print("IScn::Restoring Power")
         
         local sandbox = getSandboxOptions()
-        local elecShutModifier = iscnModData.sandboxCopy:getOptionByName("ElecShutModifier"):getValue()
-        sandbox:set("ElecShutModifier", elecShutModifier)
+        sandbox:set("ElecShutModifier", iscnModData.elecShutModifier)
         sandbox:toLua()
         sandbox:updateFromLua()
         sandbox:applySettings()
@@ -373,7 +401,7 @@ IScnHospital.EveryTenMin = function()
         
     elseif math.floor(hoursSurvived) == iscnModData.earlyFlicker or math.floor(hoursSurvived) == iscnModData.lastFlicker then
         
-        print("IScn::Flickering Off Power")
+        DebugLog.log("IScn::Flickering Off Power")
         
         -- Flicker it off, let event turn it back on
         iscnModData.flickerOn = ZombRand(3,7)
@@ -389,7 +417,7 @@ IScnHospital.EveryTenMin = function()
         
     elseif iscnModData.turnPowerOff then
     
-        print("IScn::Turn Off Power")
+        DebugLog.log("IScn::Turn Off Power")
     
         local sandbox = getSandboxOptions()
         sandbox:set("ElecShutModifier", -1)
@@ -405,20 +433,19 @@ end
 
 IScnHospital.EveryOneMin = function()
     
-    print("IScn::EveryOneMin")
+    DebugLog.log("IScn::EveryOneMin")
     
     local iscnModData = ModData.get("IScnData")
 
     iscnModData.flickerOn = iscnModData.flickerOn - 1
     if iscnModData.flickerOn <= 1 then     
         -- Flicker Power On
-        print("IScn::Power Flicker On")
+        DebugLog.log("IScn::Power Flicker On")
         
         getPlayer():playSound("LightBulbAmbiance");
         
         local sandbox = getSandboxOptions()
-        local elecShutModifier = iscnModData.sandboxCopy:getOptionByName("ElecShutModifier"):getValue()                 
-        sandbox:set("ElecShutModifier", elecShutModifier)
+        sandbox:set("ElecShutModifier", iscnModData.elecShutModifier)
         sandbox:toLua()
         sandbox:updateFromLua()
         sandbox:applySettings()           
@@ -437,7 +464,7 @@ IScnHospital.DifficultyCheck = function()
         iscnModData.normalMode = IScnModOptions.options.normalMode
         iscnModData.hardMode = IScnModOptions.options.hardMode
     else
-        print("IScn: ModOptions unavailable, use normal mode")
+        DebugLog.log("IScn: ModOptions unavailable, use normal mode")
         iscnModData.normalMode = true;
     end  
     
@@ -563,13 +590,13 @@ end
 IScnHospital.AddZombies = function()    
         
     local iscnModData = ModData.get("IScnData")
-    iscnModData.triggerZombies = {}
+    iscnModData.triggers = {}
               
     -- Spawn Front of Room
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12939, 2043, 2, "Nurse", false, IsoDirections.N)
     local zombieEater = ImmersiveScenarios.CreateZombieEater(zombieBody, 12939, 2043, 2, "Doctor", 4)    
     -- Trigger Scream
-    table.insert(iscnModData.triggerZombies, {zombieEater, 12930, 2043, 2, "PZ_FemaleBeingEaten_Death", nil});
+    ImmersiveScenarios.CreateSoundTrigger(12930, 2043, 2, "PZ_FemaleBeingEaten_Death", 12939, 2043, 2, 1);
 
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12947, 2053, 2, "HospitalPatient")
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12947, 2053, 2, "HospitalPatient", 4, nil, nil)
@@ -800,11 +827,9 @@ IScnHospital.setSandBoxVars = function()
     gt:setDay(sandbox:getOptionByName("StartDay"):getValue()-1); -- The night before
     gt:setStartDay(sandbox:getOptionByName("StartDay"):getValue()-1); -- The night before
     gt:setTimeOfDay(IScnHospital.hourOfDay);
-    
-    iscnModData.sandboxCopy = SandboxOptions.new()
-    iscnModData.sandboxCopy:copyValuesFrom(sandbox) -- Save Sandbox
-    
-    print("ElecShutModifier: "..sandbox:getOptionByName("ElecShutModifier"):getValue())
+       
+    iscnModData.elecShutModifier = sandbox:getOptionByName("ElecShutModifier"):getValue()
+    DebugLog.log("IScn:ElecShutModifier: "..iscnModData.elecShutModifier)
     
     -- Turn off electricity temporarily
     sandbox:set("ElecShutModifier", -1)
@@ -812,7 +837,7 @@ IScnHospital.setSandBoxVars = function()
     sandbox:updateFromLua()
     sandbox:applySettings()
     
-    print("ElecShutModifier: "..sandbox:getOptionByName("ElecShutModifier"):getValue())
+    DebugLog.log("IScn:ElecShutModifier: "..sandbox:getOptionByName("ElecShutModifier"):getValue())
 
 end
 
@@ -834,7 +859,7 @@ end
 
 IScnHospital.OnInitWorld = function()
         
-    print("IScn:OnInitWorld")    
+    DebugLog.log("IScn:OnInitWorld")    
     
     Events.OnInitGlobalModData.Add(IScnHospital.OnInitGlobalModData);    
     
@@ -842,7 +867,7 @@ IScnHospital.OnInitWorld = function()
 end
 
 IScnHospital.OnCreatePlayer = function(playerIndex, pl)
-    --print("ISCN::TEST")
+    --DebugLog.log("ISCN::TEST")
     
     --pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):AddDamage(50);
 end
