@@ -86,46 +86,46 @@ IScnHospital.OnNewGame = function(player, square)
         ImmersiveScenarios.addBarricade(12931, 2043, 2, 4, true); -- Spawn Room
         ImmersiveScenarios.unlockDoor(12931, 2043, 2); -- Spawn Room
         
-        ImmersiveScenarios.addBarricade(12931, 2017, 2, 2, false, 3.0);        
-        ImmersiveScenarios.addBarricade(12930, 2017, 2, 2, false, 3.0);        
+        ImmersiveScenarios.addBarricade(12931, 2017, 2, 2, false, 5.0);        
+        ImmersiveScenarios.addBarricade(12930, 2017, 2, 2, false, 5.0);        
         
-        ImmersiveScenarios.addBarricade(12944, 2042, 2, 1, true, 3.0);
+        ImmersiveScenarios.addBarricade(12944, 2042, 2, 1, true, 5.0);
                
-        ImmersiveScenarios.addBarricade(12941, 2036, 1, 2, false, 5.0);        
-        ImmersiveScenarios.addBarricade(12941, 2037, 1, 2, false, 5.0);
-        ImmersiveScenarios.addBarricade(12927, 2036, 1, 2, true, 5.0);
+        ImmersiveScenarios.addBarricade(12941, 2036, 1, 2, false, 32.0);        
+        ImmersiveScenarios.addBarricade(12941, 2037, 1, 2, false, 32.0);
+        ImmersiveScenarios.addBarricade(12927, 2036, 1, 2, true, 32.0);
                         
-        ImmersiveScenarios.addBarricade(12946, 2023, 1, 2, true, 5.0);
-        ImmersiveScenarios.addBarricade(12946, 2022, 1, 2, true, 5.0);
+        ImmersiveScenarios.addBarricade(12946, 2023, 1, 2, true, 32.0);
+        ImmersiveScenarios.addBarricade(12946, 2022, 1, 2, true, 32.0);
 
-        ImmersiveScenarios.addBarricade(12941, 2043, 1, 2, false, 5.0);
-        ImmersiveScenarios.addBarricade(12941, 2044, 1, 2, false, 5.0);
+        ImmersiveScenarios.addBarricade(12941, 2043, 1, 2, false, 32.0);
+        ImmersiveScenarios.addBarricade(12941, 2044, 1, 2, false, 32.0);
         
         -- Morgue Inner
-        ImmersiveScenarios.addBarricade(12952, 2000, 0, 2, true, 64.0);
-        ImmersiveScenarios.addBarricade(12952, 2001, 0, 2, true, 64.0);        
+        ImmersiveScenarios.addBarricade(12952, 2000, 0, 2, true, 256.0);
+        ImmersiveScenarios.addBarricade(12952, 2001, 0, 2, true, 256.0);        
         
         -- Morgue Outer
-        ImmersiveScenarios.addBarricade(12949, 2013, 0, 4, false, 16.0);
-        ImmersiveScenarios.addBarricade(12950, 2013, 0, 4, false, 16.0);
+        ImmersiveScenarios.addBarricade(12949, 2013, 0, 4, false, 64.0);
+        ImmersiveScenarios.addBarricade(12950, 2013, 0, 4, false, 64.0);
                 
-        ImmersiveScenarios.addBarricade(12937, 2089, 0, 4, false, 16.0);
-        ImmersiveScenarios.addBarricade(12938, 2089, 0, 3, false, 16.0);
+        ImmersiveScenarios.addBarricade(12937, 2089, 0, 4, false, 64.0);
+        ImmersiveScenarios.addBarricade(12938, 2089, 0, 3, false, 64.0);
         
-        ImmersiveScenarios.addBarricade(12948, 2089, 0, 2, false, 16.0);
-        ImmersiveScenarios.addBarricade(12949, 2089, 0, 2, false, 16.0);
+        ImmersiveScenarios.addBarricade(12948, 2089, 0, 2, false, 64.0);
+        ImmersiveScenarios.addBarricade(12949, 2089, 0, 2, false, 64.0);
 
-        ImmersiveScenarios.addBarricade(12984, 2023, 0, 2, false, 16.0);
-        ImmersiveScenarios.addBarricade(12984, 2024, 0, 2, false, 16.0);
+        ImmersiveScenarios.addBarricade(12984, 2023, 0, 2, false, 64.0);
+        ImmersiveScenarios.addBarricade(12984, 2024, 0, 2, false, 64.0);
         
-        ImmersiveScenarios.addBarricade(12984, 2031, 0, 2, false, 16.0);
-        ImmersiveScenarios.addBarricade(12984, 2032, 0, 2, false, 16.0);
+        ImmersiveScenarios.addBarricade(12984, 2031, 0, 2, false, 64.0);
+        ImmersiveScenarios.addBarricade(12984, 2032, 0, 2, false, 64.0);
         
-        ImmersiveScenarios.addBarricade(12965, 2017, 0, 2, true, 16.0); 
-        ImmersiveScenarios.addBarricade(12966, 2017, 0, 2, true, 16.0);     
+        ImmersiveScenarios.addBarricade(12965, 2017, 0, 2, true, 64.0); 
+        ImmersiveScenarios.addBarricade(12966, 2017, 0, 2, true, 64.0);     
         
         -- Trash Door
-        ImmersiveScenarios.addBarricade(12942, 2002, 0, 2, true, 16.0); 
+        ImmersiveScenarios.addBarricade(12942, 2002, 0, 2, true, 64.0); 
         
         -- TEST. Need a way to harden 1st floor windows. Barricades too unrealistic
         --for x=12924, 12928 do
@@ -201,13 +201,14 @@ IScnHospital.OnNewGame = function(player, square)
             for i = 0, 3 do
                 c:AddItem("Base.Nails");
             end
-            local mapItem = c:AddItem("IScnHospital_Map_WP");  
-            mapItem:setMapID("IScnHospital_Stash_WP")
-            stash = StashSystem.getStash("IScnHospital_Stash_WP")
+            local mapItem = InventoryItemFactory.CreateItem("IScnHospital_Map_WP")           
+            mapItem:setMapID("IScnHospital_Map_WP")
+            local stash = StashSystem.getStash("IScnHospital_Map_WP")
             StashSystem.doStashItem(stash, mapItem)
             mapItem:setName("West Point : "..mapItem:getDisplayName())
             mapItem:setCustomName(true)
-            
+            c:AddItem(mapItem)
+                
             local gun = sq:AddWorldInventoryItem("Base.Revolver", 0.9, 0.9, 0.5)
             gun:setCondition(0, false);
         end

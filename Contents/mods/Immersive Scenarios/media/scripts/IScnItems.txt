@@ -6,7 +6,7 @@ module Base {
         DisplayName			= West Point (Family Home),
         Icon				= Map,
         Weight				= 0.1,
-        Map                 = IScnHospital_Stash_WP,
+        Map                 = IScnHospital_Map_WP,
         SurvivalGear        = TRUE,
         WorldStaticModel    = Map,
     },

@@ -51,7 +51,7 @@ local function overlayPNG(mapUI, x, y, scale, layerName, tex, alpha)
 	layer:setBoundsInSquares(x, y, x + texture:getWidth() * scale, y + texture:getHeight() * scale)
 end
 
-LootMaps.Init.IScnHospital_Stash_WP = function(mapUI)
+LootMaps.Init.IScnHospital_Map_WP = function(mapUI)
 	local mapAPI = mapUI.javaObject:getAPIv1()
 	MapUtils.initDirectoryMapData(mapUI, 'media/maps/Muldraugh, KY')
 	MapUtils.initDefaultStyleV1(mapUI)
