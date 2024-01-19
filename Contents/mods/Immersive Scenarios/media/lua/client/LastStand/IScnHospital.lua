@@ -526,66 +526,78 @@ IScnHospital.ApplyInjuries = function()
     local pl = getPlayer();
     local iscnModData = ModData.get("IScnData")
 
-    damage = 30 + iscnModData.difficultymodifier;
-    injurytime = 35 + iscnModData.injurytimemodifier;
+    local damage = 30 + iscnModData.difficultymodifier;
+    local injurytime = 35 + iscnModData.injurytimemodifier;
+
+    local bodydamage = pl:getBodyDamage();    
+    local bodypart = nil
 
     local leg = ZombRand(2)+1;
     if iscnModData.normalMode then
         -- leg injury       
         if leg == 1 then
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.LowerLeg_R)
         else
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_L):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.LowerLeg_L)
         end
+        bodypart:AddDamage(damage);
+        bodypart:setFractureTime(injurytime);
+        bodypart:setSplint(true, .8);
+        bodypart:setCut(true, true);
+        bodypart:setBandaged(true, 5, true, "Base.AlcoholBandage");
+        bodypart:SetInfected(false);
     elseif iscnModData.hardMode then            
         if leg == 1 then
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_R):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.UpperLeg_R)
         else
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_L):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_L):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_L):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperLeg_L):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.UpperLeg_L)
         end
+        bodypart:AddDamage(damage);
+        bodypart:setFractureTime(injurytime);
+        bodypart:setSplint(true, .8);
+        bodypart:setCut(true, true);
+        bodypart:setBandaged(true, 5, true, "Base.AlcoholBandage");
+        bodypart:SetInfected(false);
     end
     
     local arm = ZombRand(2)+1;
     if iscnModData.normalMode then 
         -- arm injury       
         if arm == 1 then
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_L):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_L):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_L):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_L):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.UpperArm_L)
         else
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_L):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_L):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_L):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_L):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.LowerArm_L)
         end
+        bodypart:AddDamage(damage);
+        bodypart:setFractureTime(injurytime);
+        bodypart:setSplint(true, .8);
+        bodypart:setCut(true, true);
+        bodypart:setBandaged(true, 5, true, "Base.AlcoholBandage");
+        bodypart:SetInfected(false);
     end
     
     if iscnModData.hardMode then
         if arm == 1 then
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_R):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_R):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_R):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.UpperArm_R):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.UpperArm_R)
         else
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_R):AddDamage(damage);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_R):setFractureTime(injurytime);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_R):setSplint(true, .8);
-            pl:getBodyDamage():getBodyPart(BodyPartType.LowerArm_R):setBandaged(true, 5, true, "Base.AlcoholBandage");
+            bodypart = bodydamage:getBodyPart(BodyPartType.LowerArm_R)
         end
+        bodypart:AddDamage(damage);
+        bodypart:setFractureTime(injurytime);
+        bodypart:setSplint(true, .8);
+        bodypart:setCut(true, true);
+        bodypart:setBandaged(true, 5, true, "Base.AlcoholBandage");
+        bodypart:SetInfected(false);
     end
+    
+    bodydamage:setInfected(false);
+    bodydamage:setInfectionLevel(0);
+    bodydamage:Update();
+    
+    if bodydamage:IsInfected() == true then
+        print("ISCN: BUG infected, please report to ImmersiveScenarios");
+    end
+       
 end
 
 IScnHospital.AddZombies = function()    
@@ -651,10 +663,16 @@ IScnHospital.AddZombies = function()
     
     addZombiesInOutfit(12928, 2026, 1, 2, "Doctor", 50);
     
+    addZombiesInOutfit(12924, 2047, 1, 1, "Doctor", 50, true, true, true, true, 20);
+           
     -- Empty Wing
     addZombiesInOutfit(12985, 2014, 1, 1, "HospitalPatient", 50, true, true, true, true, 20);
     addZombiesInOutfit(12986, 2015, 1, 1, "HospitalPatient", 100, true, true, true, true, 20);
     addZombiesInOutfit(12984, 2024, 1, 1, "HospitalPatient", 50, true, true, true, true, 20);    
+    
+    addZombiesInOutfit(12978, 2028, 1, 1, "Nurse", 50, true, true, true, true, 20);
+    
+    addZombiesInOutfit(12964, 2007, 1, 1, "OfficeWorker", 50, true, true, true, true, 20);
     
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12985, 2024, 1, "Nurse", false)
     local zombieEater = ImmersiveScenarios.CreateZombieEater(zombieBody, 12985, 2024, 1, "Punk")
@@ -679,8 +697,10 @@ IScnHospital.AddZombies = function()
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12935, 2016, 0, "Classy", false, IsoDirections.S)
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12935, 2016, 0, "Cook_Generic")
 
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12926, 2021, 0, nil)
-    ImmersiveScenarios.CreateZombieEater(zombieBody, 12926, 2021, 0, "Cook_Generic")
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12933, 2030, 0, nil)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12933, 2030, 0, "Cook_Generic")
+    
+    addZombiesInOutfit(12926, 2020, 0, 1, "HospitalPatient", 50, true, true, true, true, 20);
     
     -- Waiting Area
     addZombiesInOutfit(12974, 2015, 0, 4, nil, 50); 
@@ -713,11 +733,11 @@ IScnHospital.AddZombies = function()
     addZombiesInOutfit(12966, 2029, 0, 4, "HospitalPatient", 50);        
     
     -- Front Area
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12928, 2082, 0, "Fisherman", false, IsoDirections.N)
-    ImmersiveScenarios.CreateZombieEater(zombieBody, 12928, 2082, 0, "Young")
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12925, 2081, 0, "Fisherman", false, IsoDirections.N)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12925, 2081, 0, "Young")
     
-    local zombieBody = ImmersiveScenarios.CreateZombieBody(12930, 2082, 0, "Young", true, IsoDirections.E)
-    ImmersiveScenarios.CreateZombieEater(zombieBody, 12930, 2082, 0, "WaiterStripper")
+    local zombieBody = ImmersiveScenarios.CreateZombieBody(12932, 2083, 0, "Young", true, IsoDirections.E)
+    ImmersiveScenarios.CreateZombieEater(zombieBody, 12932, 2083, 0, "WaiterStripper")
     
     -- Overflow area
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12964, 2024, 0, "AmbulanceDriver")
@@ -725,6 +745,8 @@ IScnHospital.AddZombies = function()
     
     local zombieBody = ImmersiveScenarios.CreateZombieBody(12966, 2028, 0, "AmbulanceDriver")
     ImmersiveScenarios.CreateZombieEater(zombieBody, 12966, 2028, 0, "Waiter_Classy")
+    
+    addZombiesInOutfit(12945, 2027, 0, 1, "HospitalPatient", 50, true, true, true, true, 20);
     
     -- Trash Area        
     addZombiesInOutfit(12943, 1997, 0, 1, "Nurse", 50, true, false, true, true, 10);
