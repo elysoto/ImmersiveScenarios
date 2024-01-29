@@ -657,20 +657,20 @@ IScnHospital.AddZombies = function()
     
     ISCN.CreateOutfitZombies(12942, 2011, 1, 3, "", 50);
     
-    ISCN.CreateOutfitZombies(12924, 2054, 1, 1, "Doctor", 50, false, true, true, true, 20); -- Shower
+    ISCN.CreateOutfitZombies(12924, 2054, 1, 1, "Doctor", 50, false, true, true, true, 2.0); -- Shower
     
     ISCN.CreateOutfitZombies(12928, 2026, 1, 2, "Doctor", 50);
     
-    ISCN.CreateOutfitZombies(12924, 2047, 1, 1, "Doctor", 50, true, true, true, true, 20);
+    ISCN.CreateOutfitZombies(12924, 2047, 1, 1, "Doctor", 50, true, true, true, true, 2.0);
            
     -- Empty Wing
-    ISCN.CreateOutfitZombies(12985, 2014, 1, 1, "HospitalPatient", 50, true, true, true, true, 20);
-    ISCN.CreateOutfitZombies(12986, 2015, 1, 1, "HospitalPatient", 100, true, true, true, true, 20);
-    ISCN.CreateOutfitZombies(12984, 2024, 1, 1, "HospitalPatient", 50, true, true, true, true, 20);    
+    ISCN.CreateOutfitZombies(12985, 2014, 1, 1, "HospitalPatient", 50, true, true, true, true, 2.0);
+    ISCN.CreateOutfitZombies(12986, 2015, 1, 1, "HospitalPatient", 100, true, true, true, true, 2.0);
+    ISCN.CreateOutfitZombies(12984, 2024, 1, 1, "HospitalPatient", 50, true, true, true, true, 2.0);    
     
-    ISCN.CreateOutfitZombies(12978, 2028, 1, 1, "Nurse", 50, true, true, true, true, 20);
+    ISCN.CreateOutfitZombies(12978, 2028, 1, 1, "Nurse", 50, true, true, true, true, 2.0);
     
-    ISCN.CreateOutfitZombies(12964, 2007, 1, 1, "OfficeWorker", 50, true, true, true, true, 20);
+    ISCN.CreateOutfitZombies(12964, 2007, 1, 1, "OfficeWorker", 50, true, true, true, true, 2.0);
     
     local zombieBody = ISCN.CreateZombieBody(12985, 2024, 1, "Nurse", false)
     local zombieEater = ISCN.CreateZombieEater(zombieBody, 12985, 2024, 1, "Punk")
@@ -698,7 +698,7 @@ IScnHospital.AddZombies = function()
     local zombieBody = ISCN.CreateZombieBody(12933, 2030, 0, nil)
     ISCN.CreateZombieEater(zombieBody, 12933, 2030, 0, "Cook_Generic")
     
-    ISCN.CreateOutfitZombies(12926, 2020, 0, 1, "HospitalPatient", 50, true, true, true, true, 20);
+    ISCN.CreateOutfitZombies(12926, 2020, 0, 1, "HospitalPatient", 50, true, true, true, true, 2.0);
     
     -- Waiting Area
     ISCN.CreateOutfitZombies(12974, 2015, 0, 4, "", 50); 
@@ -744,30 +744,30 @@ IScnHospital.AddZombies = function()
     local zombieBody = ISCN.CreateZombieBody(12966, 2028, 0, "AmbulanceDriver")
     ISCN.CreateZombieEater(zombieBody, 12966, 2028, 0, "Waiter_Classy")
     
-    ISCN.CreateOutfitZombies(12945, 2027, 0, 1, "HospitalPatient", 50, true, true, true, true, 20);
+    ISCN.CreateOutfitZombies(12945, 2027, 0, 1, "HospitalPatient", 50, true, true, true, true, 2);
     
     -- Trash Area        
-    ISCN.CreateOutfitZombies(12943, 1997, 0, 1, "Nurse", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12943, 1998, 0, 1, "Dean", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12943, 1999, 0, 1, "Cook_IceCream", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12943, 2000, 0, 1, "", 50, true, false, true, true, 10);
+    ISCN.CreateOutfitZombies(12943, 1997, 0, 1, "Nurse", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12943, 1998, 0, 1, "Dean", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12943, 1999, 0, 1, "Cook_IceCream", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12943, 2000, 0, 1, "", 50, true, false, true, true, 1.0);
     
-    ISCN.CreateOutfitZombies(12944, 1997, 0, 1, "", 50, true, false, true, true, 10);
+    ISCN.CreateOutfitZombies(12944, 1997, 0, 1, "", 50, true, false, true, true, 1.0);
     local zombieBody = ISCN.CreateZombieBody(12944, 1998, 0, "Classy")
     ISCN.CreateZombieEater(zombieBody, 12944, 1998, 0, "Doctor")
-    ISCN.CreateOutfitZombies(12944, 1999, 0, 1, "Young", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12944, 2000, 0, 1, "Doctor", 50, true, false, true, true, 10);    
+    ISCN.CreateOutfitZombies(12944, 1999, 0, 1, "Young", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12944, 2000, 0, 1, "Doctor", 50, true, false, true, true, 1.0);    
     
-    ISCN.CreateOutfitZombies(12945, 1997, 0, 1, "HospitalPatient", 50, true, false, true, true, 10);
+    ISCN.CreateOutfitZombies(12945, 1997, 0, 1, "HospitalPatient", 50, true, false, true, true, 1.0);
     local zombieBody = ISCN.CreateZombieBody(12945, 1998, 0, nil, false)
     ISCN.CreateZombieEater(zombieBody, 12945, 1998, 0, "Doctor")
-    ISCN.CreateOutfitZombies(12945, 1999, 0, 1, "SportsFan", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12945, 2000, 0, 1, "HospitalPatient", 50, true, false, true, true, 10); 
+    ISCN.CreateOutfitZombies(12945, 1999, 0, 1, "SportsFan", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12945, 2000, 0, 1, "HospitalPatient", 50, true, false, true, true, 1.0); 
     
-    ISCN.CreateOutfitZombies(12946, 1997, 0, 1, "HospitalPatient", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12946, 1998, 0, 1, "Young", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12946, 1999, 0, 1, "", 50, true, false, true, true, 10);
-    ISCN.CreateOutfitZombies(12946, 2000, 0, 1, "Redneck", 50, true, false, true, true, 10); 
+    ISCN.CreateOutfitZombies(12946, 1997, 0, 1, "HospitalPatient", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12946, 1998, 0, 1, "Young", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12946, 1999, 0, 1, "", 50, true, false, true, true, 1.0);
+    ISCN.CreateOutfitZombies(12946, 2000, 0, 1, "Redneck", 50, true, false, true, true, 1.0); 
 
 end
 

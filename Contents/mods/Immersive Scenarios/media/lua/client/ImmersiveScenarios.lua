@@ -367,15 +367,14 @@ ISCN.CreateOutfitZombies = function(x, y, z, totalZombies, outfit, femaleChance,
     --Integer femaleChance, boolean isCrawler, boolean isFallOnFront,
     --boolean isFakeDead, boolean isKnockedDown, float health)
     -- femaleChance 0 to 100
-    isCrawler = isCrawler or false
-    isFallOnFront = isFallOnFront or false
-    isFakeDead = isFakeDead or false
-    isKnockedDown = isKnockedDown or false
-    health = health or 1.0 -- Range 0.0 to 2.0
     
-    local zombies = addZombiesInOutfit(x, y, z, totalZombies, outfit, femaleChance,
-        isCrawler, isFallOnFront, isFakeDead, isKnockedDown, health);
-        
+    local zombies = nil
+    if isCrawler == nil then
+        zombies = addZombiesInOutfit(x, y, z, totalZombies, outfit, femaleChance);
+    else        
+        zombies = addZombiesInOutfit(x, y, z, totalZombies, outfit, femaleChance,
+            isCrawler, isFallOnFront, isFakeDead, isKnockedDown, health);
+    end
     --addZombiesInOutfit(x, y, z, count, outfit, Integer femaleChance, crawler, isFallOnFront, isFakeDead, knockedDown, float health);
     --addZombiesInOutfit(12939, 2043, 2, 1, "Nurse", 100, true, false, true, true, 10); This Works, dead!
     --addZombiesInOutfit(12939, 2043, 2, 1, "Doctor", 100, true, true, true, true, 1); -- This WORKS dead!
