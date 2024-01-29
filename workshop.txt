@@ -1,39 +1,39 @@
 version=1
 id=3129175142
 title=Immersive Scenarios
-description=[h3]FEATURES:[/h3]
-description=Immersive starting scenarios that provide a more interesting backstory and challenge.
-description=
-description=Unique feature that enables Sandbox configuration with these challenge scenarios.
-description=
-description=[h3]INFO:[/h3]
-description=Install ModOptions to enable setting Easy, Normal, Hard options.
-description=
-description=Check out my [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3129968968]collection[/url] for mod ideas.
-description=
-description=These scenarios are designed to be hard and realistic requiring your wits and intelligence to get established.
-description=
-description=[h3]SCENARIOS:[/h3]
-description=
-description=[b]Hospital Coma -[/b] Last thing you remember is that you were driving overnight to see your family. You wake up from a coma to the sound of thunder and lightning still severely injured in a dark room in what looks to be a hospital.
-description=
-description=I recommend the following mods to pair with the Hospital Coma scenario.
-description=
-description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2709866494]Immersive Medicine[/url]
-description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2795677303]Susceptible[/url]
-description=
-description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2914364562]zRe Vaccine ReMod[/url] or
-description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2392676812]Antibodies[/url]
-description=
-description=Check out the following for improved balancing between
-description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3138943665]zRe Vaccine ReMod and Immersive Medicine[/url]
-description=
-description=Note:
-description=[spoiler]Power is initially off. This is temporary and your sandbox configuration will be respected.[/spoiler]
-description=
-description=Tips:
-description=[spoiler]Find a belt, a flashlight, and a one handed weapon. You are hungry and thirsty, find food quickly or you will be too weak to fight back. If you make noise or fight, keep moving, they will be coming. You are weak and slow, and can only take on very few at a time. Find pills to help you sleep. Staircases are dangerous areas. Beware of barricaded areas.[/spoiler]
-description=
+description=[h3]FEATURES:[/h3]
+description=Immersive starting scenarios that provide a more interesting backstory and challenge.
+description=
+description=Unique feature that enables Sandbox configuration with these challenge scenarios.
+description=
+description=[h3]INFO:[/h3]
+description=Install ModOptions to enable setting Easy, Normal, Hard options.
+description=
+description=Check out my [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3129968968]collection[/url] for mod ideas.
+description=
+description=These scenarios are designed to be hard and realistic requiring your wits and intelligence to get established.
+description=
+description=[h3]SCENARIOS:[/h3]
+description=
+description=[b]Hospital Coma -[/b] Last thing you remember is that you were driving overnight to see your family. You wake up to the sound of thunder and lightning, severely injured in a dark room in what looks to be a hospital.
+description=
+description=I recommend the following mods to pair with the Hospital Coma scenario.
+description=
+description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2709866494]Immersive Medicine[/url]
+description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2795677303]Susceptible[/url]
+description=
+description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2914364562]zRe Vaccine ReMod[/url] or
+description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2392676812]Antibodies[/url]
+description=
+description=Check out the following for improved balancing between
+description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3138943665]zRe Vaccine ReMod and Immersive Medicine[/url]
+description=
+description=Note:
+description=[spoiler]Power is initially off. This is temporary and your sandbox configuration will be respected.[/spoiler]
+description=
+description=Tips:
+description=[spoiler]Find a belt, a flashlight, and a one handed weapon. You are hungry and thirsty, find food quickly or you will be too weak to fight back. If you make noise or fight, keep moving, they will be coming. You are weak and slow, and can only take on very few at a time. Find pills to help you sleep. Staircases are dangerous areas. Beware of barricaded areas.[/spoiler]
+description=
 description=https://github.com/elysoto/ImmersiveScenarios
 tags=Build 41;Hardmode;Map;Realistic
 visibility=public

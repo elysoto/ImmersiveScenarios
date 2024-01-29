@@ -1,7 +1,7 @@
 
-ImmersiveScenarios = {}
+ISCN = {}
 
-ImmersiveScenarios.getContainer = function(x, y, z)
+ISCN.getContainer = function(x, y, z)
     DebugLog.log("IScn:getContainer: " ..x.." "..y.." "..z)
     local sq = getCell():getGridSquare(x, y, z);
     if sq ~= nil then
@@ -18,7 +18,7 @@ ImmersiveScenarios.getContainer = function(x, y, z)
     return nil;
 end
 
-ImmersiveScenarios.switchLight = function(x, y, z, onOff)
+ISCN.switchLight = function(x, y, z, onOff)
 
     DebugLog.log("IScn:switchLight: " ..x.." "..y.." "..z)
     local sq = getCell():getGridSquare(x, y, z);
@@ -38,7 +38,7 @@ ImmersiveScenarios.switchLight = function(x, y, z, onOff)
     end
 end
 
-ImmersiveScenarios.openDoor = function(x,y,z, north)
+ISCN.openDoor = function(x,y,z, north)
     
     local doorClosed = true
     local sq = getCell():getGridSquare(x, y, z);
@@ -59,7 +59,7 @@ ImmersiveScenarios.openDoor = function(x,y,z, north)
     end 
 end
 
-ImmersiveScenarios.lockDoor = function(x, y, z)
+ISCN.lockDoor = function(x, y, z)
     local key = -1
     local obj = nil
     local sq = getCell():getGridSquare(x, y, z);
@@ -83,7 +83,7 @@ ImmersiveScenarios.lockDoor = function(x, y, z)
     end
 end
 
-ImmersiveScenarios.unlockDoor = function(x, y, z)
+ISCN.unlockDoor = function(x, y, z)
     local doorLocked = true
     local sq = getCell():getGridSquare(x, y, z);
     if sq then
@@ -106,59 +106,44 @@ ImmersiveScenarios.unlockDoor = function(x, y, z)
     end    
 end
 
-ImmersiveScenarios.hardenWindow = function(x, y, z, healthMult)    
-    healthMult = healthMult or 1.0
-    
-    local objFound = false
-    local sq = getCell():getGridSquare(x, y, z)
-    if sq then
-        for i = 0, sq:getObjects():size()-1 do
-            local o = sq:getObjects():get(i);            
-            if instanceof(o, "IsoWindow") then        
-                --local health = o:makeWindowInvincible)
-                --DebugLog.log(o.MaxHealth)
-                --DebugLog.log(o.Health)
-                --mat:setCondition(health * healthMult)                
-                DebugLog.log("IScn::hardenWindow "..x.." "..y.." "..z)
-                DebugLog.log("Does not work yet")
-                objFound = true             
-                break;
-            end
-        end
-    else
-        DebugLog.log("Square not found "..x.." "..y.." "..z)
-    end
-    if objFound == false then
-        DebugLog.log("IScn::hardenWindow - Obj Not Found " ..x.." "..y.." "..z)
-    end
+---@param _command string
+---@param _player IsoPlayer
+---@param _barricadeable IsoDoor|IsoWindow|IsoThumpable
+---@param _plankNumber integer
+---@param _plankHealthMult float
+function ISCN.BarricadeCommand(_command, _player, _barricadeable, _plankNumber, _plankHealthMult)
+    if not _command then _command = "ISCN_BarricadePlayerSide" end
+    if not _player then _player = getPlayer() end
+    if not _plankNumber then _plankNumber = 1 end
+    if not _plankHealthMult then _plankHealthMult = 1.0 end
+
+    sendClientCommand(_player, "ISCNmodule", _command, {
+        x = _barricadeable:getX(),
+        y = _barricadeable:getY(),
+        z = _barricadeable:getZ(),
+        index = _barricadeable:getObjectIndex(),
+        plankNumber = _plankNumber,
+        plankHealthMult = _plankHealthMult,
+    });
 end
 
-ImmersiveScenarios.addBarricade = function(x, y, z, num, faceAway, healthMult, material)    
+ISCN.addBarricade = function(x, y, z, num, faceAway, healthMult)    
     healthMult = healthMult or 1.0
-    material = material or "Plank"
     
     local objFound = false
     local sq = getCell():getGridSquare(x, y, z)
     if sq then
         for i = 0, sq:getObjects():size()-1 do
             local o = sq:getObjects():get(i);            
-            if instanceof(o, "BarricadeAble") then                
-                for i=0, num-1 do
-                    local barricade = IsoBarricade.AddBarricadeToObject(o, faceAway)
-                    local mat = InventoryItemFactory.CreateItem('Base.'..material)
-                    local health = mat:getCondition()
-                    mat:setCondition(health * healthMult)
-                    DebugLog.log("IScn::Barricade "..material.." "..mat:getCondition().." @"..x.." "..y.." "..z)
-                    if material == 'MetalBar' then
-                        barricade:addMetalBar(getPlayer(), mat)          
-                    elseif material == 'SheetMetal' then
-                        barricade:addMetal(getPlayer(), mat)          
-                    else -- if material == 'Plank' then
-                        if barricade:canAddPlank() then
-                            barricade:addPlank(getPlayer(), mat)                    
-                        end
-                    end
+            if instanceof(o, "BarricadeAble") then
+                local command = nil
+                --command = "ISCN_BarricadeBothSides"
+                if faceAway then
+                    command = "ISCN_BarricadeOppositePlayerSide"
+                else
+                    command = "ISCN_BarricadePlayerSide"
                 end
+                ISCN.BarricadeCommand(command, getPlayer(), o, num, healthMult)
                 objFound = true             
                 break;
             end
@@ -171,7 +156,7 @@ ImmersiveScenarios.addBarricade = function(x, y, z, num, faceAway, healthMult, m
     end
 end
 
-ImmersiveScenarios.GetBuildingRooms = function(pl)
+ISCN.GetBuildingRooms = function(pl)
     local buildingRooms = {};
 
     local buildingDef = pl:getCurrentBuildingDef();
@@ -187,7 +172,7 @@ ImmersiveScenarios.GetBuildingRooms = function(pl)
     return buildingRooms;
 end
 
-ImmersiveScenarios.GetBuildingGridSquares = function(rooms)
+ISCN.GetBuildingGridSquares = function(rooms)
     local buildingGridSquares = {};
     for key,value in pairs(rooms) do
         local currentRoom = value;
@@ -200,7 +185,7 @@ ImmersiveScenarios.GetBuildingGridSquares = function(rooms)
     return buildingGridSquares;
 end
 
-ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction, reanimate, reanimateHourOffset, fakeDead, crawling)
+ISCN.CreateZombieBody = function(x, y, z, outfit, male, direction, reanimate, reanimateHourOffset, fakeDead, crawling)
     male = male or nil
     direction = direction or nil
     reanimate = reanimate or false
@@ -293,7 +278,7 @@ ImmersiveScenarios.CreateZombieBody = function(x, y, z, outfit, male, direction,
     return {zombie, body, direction}
 end
 
-ImmersiveScenarios.CreateZombieEater = function(zombieBody, x, y, z, outfit, distRelease, soundfile, distSound, distGiveUp, reanimate, reanimateHourOffset, fakeDead, crawling)
+ISCN.CreateZombieEater = function(zombieBody, x, y, z, outfit, distRelease, soundfile, distSound, distGiveUp, reanimate, reanimateHourOffset, fakeDead, crawling)
     distRelease = distRelease or 10
     soundfile = soundfile or nil
     distSound = distSound or 30
@@ -306,6 +291,8 @@ ImmersiveScenarios.CreateZombieEater = function(zombieBody, x, y, z, outfit, dis
     local iscnModData = ModData.get("IScnData") -- Remove to optimize
     
     local zombieEater = addZombiesInOutfit(x, y, z, 1, outfit, 0):get(0);
+       
+    zombieEater:canBeDeletedUnnoticed(20000)
        
     -- if soundfile == nil then
         -- soundfile = "zombieeating"
@@ -373,13 +360,93 @@ ImmersiveScenarios.CreateZombieEater = function(zombieBody, x, y, z, outfit, dis
     return zombieEater;
 end
 
-ImmersiveScenarios.CreateSoundTrigger = function(x, y, z, soundfile, sX, sY, sZ, distSound)
+ISCN.CreateOutfitZombies = function(x, y, z, totalZombies, outfit, femaleChance, isCrawler, 
+    isFallOnFront, isFakeDead, isKnockedDown, health)
+    --boolean isFakeDead, boolean isKnockedDown, float health)
+    --addZombiesInOutfit(int x, int y, int z, int totalZombies, String outfit,
+    --Integer femaleChance, boolean isCrawler, boolean isFallOnFront,
+    --boolean isFakeDead, boolean isKnockedDown, float health)
+    -- femaleChance 0 to 100
+    isCrawler = isCrawler or false
+    isFallOnFront = isFallOnFront or false
+    isFakeDead = isFakeDead or false
+    isKnockedDown = isKnockedDown or false
+    health = health or 1.0 -- Range 0.0 to 2.0
+    
+    local zombies = addZombiesInOutfit(x, y, z, totalZombies, outfit, femaleChance,
+        isCrawler, isFallOnFront, isFakeDead, isKnockedDown, health);
+        
+    --addZombiesInOutfit(x, y, z, count, outfit, Integer femaleChance, crawler, isFallOnFront, isFakeDead, knockedDown, float health);
+    --addZombiesInOutfit(12939, 2043, 2, 1, "Nurse", 100, true, false, true, true, 10); This Works, dead!
+    --addZombiesInOutfit(12939, 2043, 2, 1, "Doctor", 100, true, true, true, true, 1); -- This WORKS dead!
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, true, true, false, true, 1); -- This WORKS crawler
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, false, false, true, false, 1); -- This WORKS standing!
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, false, false, false, true, 10); -- This WORKS standing, turns into fakeDead when killed!
+    --addZombiesInOutfit(12941, 2043, 2, 1, "Doctor", 0, false, false, false, false, 10); -- This WORKS standing, but won't turn into fakeDead when killed!        
+        
+    for zI=zombies:size()-1,0,-1 do
+        local zombie = zombies:get(zI);
+        if zombie then
+            zombie:canBeDeletedUnnoticed(20000)
+        end
+    end
+    
+    return zombies
+end
+
+-------------------
+--TESTING INFO
+--------------------
+-- Sounds
+--PZ_FemaleBeingEaten_Death
+--fscream1
+--PZ_FemaleZombieEating
+--PZ_MaleZombieEating
+
+-------------------
+--local zombieBody = addZombiesInOutfit(12940, 2043, 2, 1, "Party", 0):get(0);         
+--zombieBody2:setBecomeCrawler(true) -- This is working
+--zombieBody2:knockDown(false) -- This is working
+--zombieBody2:setAlwaysKnockedDown(true)
+-------------------
+--local zombieBody = addZombiesInOutfit(12938, 2043, 2, 1, "Nurse", 0):get(0); 
+--zombieBody:becomeCorpse()
+--zombieBody:addRandomBloodDirtHolesEtc()    
+--zombieBody:setDir(IsoDirections.S);
+-------------------
+--FUNCTIONS OF INTEREST
+-------------------    
+--void addZombieSitting(int x, int y, int z)
+--void addZombiesEating(int x, int y, int z, int totalZombies, boolean skeletonBody)
+--IsoDeadBody createRandomDeadBody(IsoGridSquare square, int blood) -- WORKS
+--zombieBody:Kill(nil) -- Works
+--Kill(IsoGameCharacter killer, boolean bGory)    
+--setAlwaysKnockedDown(boolean alwaysKnockedDown)
+--setCanWalk(boolean bCanStand)
+--setForceFakeDead(boolean bForceFakeDead)
+--void spotted(IsoMovingObject movingObject, boolean boolean1) -- Works!
+--Wander() -- Maybe
+--setReanimate(boolean reanimate)
+--setReanimateTimer(float) - Does not work
+--void setAsSurvivor() -- Didn't do anything    
+--void setCrawler(boolean boolean1) -- Didn't work
+--void setCrawlerType(int int1)
+--void toggleCrawling() -- Didn't work
+-- setReanimate(false) -- Didn't work
+--addRandomVisualDamages()    
+--boolean shouldGetUpFromCrawl()
+--setSitAgainstWall(boolean boolean1) -- Didn't work        
+--void setTarget(IsoMovingObject movingObject) -- Didn't work by itself
+--void setTargetSeenTime(float float1)        
+--void burnCorpse(IsoDeadBody deadBody)
+
+ISCN.CreateSoundTrigger = function(x, y, z, soundfile, sX, sY, sZ, distSound)
     local iscnModData = ModData.get("IScnData") -- Remove to optimize
         
     table.insert(iscnModData.triggers, {{x, y, z, soundfile, sX, sY, sZ, distSound}, nil, nil});
 end
 
-ImmersiveScenarios.LoadTriggers = function()
+ISCN.LoadTriggers = function()
 
     local iscnModData = ModData.get("IScnData")
     for i=#iscnModData.triggers,1,-1 do
@@ -479,7 +546,7 @@ ImmersiveScenarios.LoadTriggers = function()
     end
 end
 
-ImmersiveScenarios.OnPlayerMove = function(pl)
+ISCN.OnPlayerMove = function(pl)
 
     local x = math.floor(pl:getX())
     local y = math.floor(pl:getY())
@@ -592,7 +659,7 @@ ImmersiveScenarios.OnPlayerMove = function(pl)
      
     if #iscnModData.triggers == 0 then
         DebugLog.log("IScn: Finished Zombie Triggers")
-        Events.OnPlayerMove.Remove(ImmersiveScenarios.OnPlayerMove)
+        Events.OnPlayerMove.Remove(ISCN.OnPlayerMove)
     end
 end
 
