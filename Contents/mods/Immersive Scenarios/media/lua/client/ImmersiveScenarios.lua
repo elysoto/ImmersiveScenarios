@@ -106,6 +106,25 @@ ISCN.unlockDoor = function(x, y, z)
     end    
 end
 
+ISCN.fixBarricade = function(_x, _y, _z)    
+
+    local sq = getCell():getGridSquare(_x, _y, _z)
+    if sq then
+        for i = 0, sq:getObjects():size()-1 do
+            local barricadeable = sq:getObjects():get(i);   
+            if instanceof(barricadeable, "BarricadeAble") then
+                sendClientCommand(getPlayer(), "ISCNmodule", "ISCN_FixBarricades", {
+                    x = barricadeable:getX(),
+                    y = barricadeable:getY(),
+                    z = barricadeable:getZ(),
+                    index = barricadeable:getObjectIndex(),
+                });
+                break;
+            end
+        end
+    end
+end
+
 ---@param _command string
 ---@param _player IsoPlayer
 ---@param _barricadeable IsoDoor|IsoWindow|IsoThumpable

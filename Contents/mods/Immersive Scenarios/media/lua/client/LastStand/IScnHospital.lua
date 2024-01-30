@@ -45,6 +45,7 @@ IScnHospital.OnGameStart = function()
         print("IScnHospital:Loading Scenario Event")
         ISCN.LoadTriggers();
         IScnHospital.EnableEvents();
+        IScnHospital.FixBarricades(); -- Fix for prior bug
     else
         print("IScnHospital:Unknown Condition")
     end
@@ -285,6 +286,49 @@ IScnHospital.OnNewGame = function(player, square)
 
         pl:playSound("LightBulbAmbiance");
 
+end
+
+IScnHospital.FixBarricades = function()
+    -- Fix for previous bugs
+    ISCN.fixBarricade(12931, 2043, 2); -- Spawn Room
+    
+    ISCN.fixBarricade(12944, 2042, 2); -- Opposite of Spawn Room
+    
+    ISCN.fixBarricade(12931, 2017, 2); -- Near Nursery        
+    ISCN.fixBarricade(12930, 2017, 2);
+    
+    ISCN.fixBarricade(12945, 2018, 1); -- Janitor Room       
+    ISCN.fixBarricade(12946, 2023, 1); -- Waiting Area
+    ISCN.fixBarricade(12946, 2022, 1);
+    
+    ISCN.fixBarricade(12941, 2036, 1); -- 2nd floor Recovery
+    ISCN.fixBarricade(12941, 2037, 1);
+    ISCN.fixBarricade(12941, 2043, 1);
+    ISCN.fixBarricade(12941, 2044, 1);        
+    ISCN.fixBarricade(12927, 2036, 1);
+           
+    ISCN.fixBarricade(12952, 2000, 0); -- Morgue Inner
+    ISCN.fixBarricade(12952, 2001, 0);        
+            
+    ISCN.fixBarricade(12949, 2013, 0); -- Morgue Outer
+    ISCN.fixBarricade(12950, 2013, 0);
+            
+    ISCN.fixBarricade(12937, 2089, 0); -- Exterior Front Upper
+    ISCN.fixBarricade(12938, 2089, 0);
+    
+    ISCN.fixBarricade(12948, 2089, 0); -- Exterior Front Lower
+    ISCN.fixBarricade(12949, 2089, 0);
+
+    ISCN.fixBarricade(12984, 2023, 0); -- Exterior Back Upper
+    ISCN.fixBarricade(12984, 2024, 0);
+    
+    ISCN.fixBarricade(12984, 2031, 0); -- Exterior Back Lower
+    ISCN.fixBarricade(12984, 2032, 0);
+    
+    ISCN.fixBarricade(12965, 2017, 0); -- ER Area
+    ISCN.fixBarricade(12966, 2017, 0);     
+            
+    ISCN.fixBarricade(12942, 2002, 0); -- Trash Door  
 end
 
 IScnHospital.EnableEvents = function()

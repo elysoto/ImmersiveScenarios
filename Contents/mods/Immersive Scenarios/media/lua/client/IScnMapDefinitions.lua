@@ -1,5 +1,3 @@
-require "ISMapDefinitions"
-
 local MINZ = 0
 local MAXZ = 24
 
