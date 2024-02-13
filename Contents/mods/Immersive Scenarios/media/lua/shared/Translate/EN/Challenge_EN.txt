@@ -76,4 +76,7 @@ Challenge_EN = {
 	Challenge_IScnHospital_name = "Immersive Scenario - Hospital",
 	Challenge_IScnHospital_desc = "Last thing you remember is that you were driving overnight to see your family. You wake up from a coma to the sound of thunder and lightning still severely injured in a dark room in what looks to be a hospital.\n\nNote: Power is initially off. This is temporary and your sandbox configuration will be respected.",
 
+	Challenge_IScnHunting_name = "Immersive Scenario - Hunting",
+	Challenge_IScnHunting_desc = "While out on a hunting trip with your family, things go horribly wrong.",
+
 }

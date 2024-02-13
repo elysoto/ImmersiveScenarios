@@ -9,6 +9,27 @@ module Base {
         Map                 = IScnHospital_Map_WP,
         SurvivalGear        = TRUE,
         WorldStaticModel    = Map,
-    },
+    }
 
+    item IScnHunting_Map_WP {
+        DisplayCategory     = Cartography,
+        Type				= Map,
+        DisplayName			= Hunting Cabin Map,
+        Icon				= Map,
+        Weight				= 0.1,
+        Map                 = IScnHunting_Map_WP,
+        SurvivalGear        = TRUE,
+        WorldStaticModel    = Map,
+    }
+
+    item IScnHuntingHome_Map_WP {
+        DisplayCategory     = Cartography,
+        Type				= Map,
+        DisplayName			= West Point (Family Home),
+        Icon				= Map,
+        Weight				= 0.1,
+        Map                 = IScnHuntingHome_Map_WP,
+        SurvivalGear        = TRUE,
+        WorldStaticModel    = Map,
+    }
 }

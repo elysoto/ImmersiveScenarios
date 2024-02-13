@@ -19,6 +19,7 @@ IScnHospital.OnGameStart = function()
             iscnModData.minCounter = 0
             iscnModData.hoursUntilPower = 12
             iscnModData.elecShutModifier = ZombRand(15,45)
+        elseif scenario == "IScnHunting" then
         else
             -- Scenario inactive
             print("IScn:Scenarios Inactive")
@@ -880,8 +881,6 @@ end
 
 IScnHospital.OnCreatePlayer = function(playerIndex, pl)
     --DebugLog.log("ISCN::TEST")
-    
-    --pl:getBodyDamage():getBodyPart(BodyPartType.LowerLeg_R):AddDamage(50);
 end
 
 IScnHospital.RemovePlayer = function(p)

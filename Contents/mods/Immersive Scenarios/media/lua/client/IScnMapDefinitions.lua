@@ -60,3 +60,27 @@ LootMaps.Init.IScnHospital_Map_WP = function(mapUI)
 	MapUtils.overlayPaper(mapUI)
 --	overlayPNG(mapUI, 36*300, 21*300+190, 0.666, "lootMapPNG", "media/ui/LootableMaps/westpointmap.png", 0.5)
 end
+
+LootMaps.Init.IScnHuntingHome_Map_WP = function(mapUI)
+	local mapAPI = mapUI.javaObject:getAPIv1()
+	MapUtils.initDirectoryMapData(mapUI, 'media/maps/Muldraugh, KY')
+	MapUtils.initDefaultStyleV1(mapUI)
+	replaceWaterStyle(mapUI)
+	mapAPI:setBoundsInSquares(10820, 6500, 12389, 7469)
+	overlayPNG(mapUI, 10868, 7314, 0.666, "badge", "media/textures/worldMap/WestPointBadge.png")
+	overlayPNG(mapUI, 10956, 7006, 0.666, "legend", "media/textures/worldMap/Legend.png")
+	MapUtils.overlayPaper(mapUI)
+--	overlayPNG(mapUI, 36*300, 21*300+190, 0.666, "lootMapPNG", "media/ui/LootableMaps/westpointmap.png", 0.5)
+end
+
+LootMaps.Init.IScnHunting_Map_WP = function(mapUI)
+	local mapAPI = mapUI.javaObject:getAPIv1()
+	MapUtils.initDirectoryMapData(mapUI, 'media/maps/Muldraugh, KY')
+	MapUtils.initDefaultStyleV1(mapUI)
+	replaceWaterStyle(mapUI)
+	mapAPI:setBoundsInSquares(4195, 7240, 4468, 7302)
+	--overlayPNG(mapUI, 10868, 7314, 0.666, "badge", "media/textures/worldMap/WestPointBadge.png")
+	--overlayPNG(mapUI, 10956, 7006, 0.666, "legend", "media/textures/worldMap/Legend.png")
+	MapUtils.overlayPaper(mapUI)
+--	overlayPNG(mapUI, 36*300, 21*300+190, 0.666, "lootMapPNG", "media/ui/LootableMaps/westpointmap.png", 0.5)
+end

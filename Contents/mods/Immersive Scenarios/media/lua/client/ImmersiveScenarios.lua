@@ -38,17 +38,18 @@ ISCN.switchLight = function(x, y, z, onOff)
     end
 end
 
-ISCN.openDoor = function(x,y,z, north)
+ISCN.openDoor = function(x,y,z)
+
     
     local doorClosed = true
     local sq = getCell():getGridSquare(x, y, z);
     if sq then
         if sq then
-            local door = sq:getDoor(north);
+            local door = sq:getIsoDoor();
             if door then
-                obj:getProperties():Set("forceLocked", "false")
-                obj:setLockedByKey(false);
-                obj:setLocked(false);
+                door:getProperties():Set("forceLocked", "false")
+                door:setLockedByKey(false);
+                door:setLocked(false);
                 door:ToggleDoorSilent();
                 doorClosed = false;
             end
@@ -752,7 +753,7 @@ function NewGameScreen:clickPlay()
         LastStandData.chosenChallenge = self.selectedItem.challenge;
         
         if LastStandData.chosenChallenge and LastStandData.chosenChallenge.enableSandbox == true then                     
-            local worldName = "IScnHospital-"..ZombRand(100000)..ZombRand(100000)..ZombRand(100000)..ZombRand(100000);
+            local worldName = LastStandData.chosenChallenge.id.."-"..ZombRand(100000)..ZombRand(100000)..ZombRand(100000)..ZombRand(100000);
             doChallenge(self.selectedItem.challenge);
             getWorld():setWorld(sanitizeWorldName(worldName));
             

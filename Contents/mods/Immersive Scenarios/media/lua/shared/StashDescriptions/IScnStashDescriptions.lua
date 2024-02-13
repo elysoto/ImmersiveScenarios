@@ -30,3 +30,25 @@ stashMap:addStamp("Checkmark", nil, 11700, 7117, 0, 0, 1)
 stashMap:addStamp("Checkmark", nil, 11650, 6900, 0, 0, 1)
 
 
+local stashMap = StashUtil.newStash("IScnHunting_Map_WP", "Map", "Base.WestpointMap", "Stash_AnnotedMap");
+
+stashMap.barricades = 0;
+stashMap.zombies = 0;
+stashMap.buildingX = 4247
+stashMap.buildingY = 7229
+
+stashMap:addStamp("House", nil, 4247, 7229, 0, 0, 1)
+
+local stashMap = StashUtil.newStash("IScnHuntingHome_Map_WP", "Map", "Base.WestpointMap", "Stash_AnnotedMap");
+
+--stashMap.traps = "1"
+stashMap.barricades = 80;
+stashMap.zombies = 8;
+stashMap.buildingX = 11129
+stashMap.buildingY = 6851
+
+stashMap.spawnTable = "SurvivorCache1";
+
+stashMap:addStamp("House", nil, 11134, 6853, 0, 0, 1)
+stashMap:addStamp(nil, "Meet up with the family", 11145, 6843, 0, 0, 1)
+stashMap:addStamp(nil, "at Grandpa's old farm", 11162, 6868, 0, 0, 1)
