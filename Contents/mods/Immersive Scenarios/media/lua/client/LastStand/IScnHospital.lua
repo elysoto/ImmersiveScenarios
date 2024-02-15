@@ -164,7 +164,7 @@ IScnHospital.OnNewGame = function(player, square)
         local sq = getCell():getGridSquare(12925, 2041, 2);
         if sq ~= nil then
             local sheet = InventoryItemFactory.CreateItem("Base.Sheet")
-            sq:AddWorldInventoryItem(sheet, 0, 0, 0.35)
+            sq:AddWorldInventoryItem(sheet, 0.1, 0.1, 0.35)
         end
 
         local sq = getCell():getGridSquare(12923, 2044, 2);
@@ -346,7 +346,7 @@ IScnHospital.EveryTenMinLoot = function()
         local iscnModData = ModData.get("IScnData")
         
         if iscnModData.journalSpawned ~= true then
-            local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0);
+            local noteBook = sq:AddWorldInventoryItem("Base.Journal", 0.5, 0.5, 0.1);
             noteBook:setCanBeWrite(true);
             
             noteBook:addPage(1, "What is the world coming to? First poor "..iscnModData.playerName.." gets into a serious car accident and now, people all over town are getting sick.")

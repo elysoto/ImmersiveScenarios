@@ -37,7 +37,10 @@ stashMap.zombies = 0;
 stashMap.buildingX = 4247
 stashMap.buildingY = 7229
 
-stashMap:addStamp("House", nil, 4247, 7229, 0, 0, 1)
+stashMap:addStamp("House", nil, 4246, 7226, 0, 0, 1)
+stashMap:addStamp("ArrowWest", nil, 4323, 7241, 0, 0, 1)
+stashMap:addStamp("ArrowNorthWest", nil, 4418, 7310, 0, 0, 1)
+stashMap:addStamp("Fish", nil, 4268, 7273, 0, 0, 0)
 
 local stashMap = StashUtil.newStash("IScnHuntingHome_Map_WP", "Map", "Base.WestpointMap", "Stash_AnnotedMap");
 
