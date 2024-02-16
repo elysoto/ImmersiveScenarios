@@ -20,6 +20,7 @@ IScnHospital.OnGameStart = function()
             iscnModData.hoursUntilPower = 12
             iscnModData.elecShutModifier = ZombRand(15,45)
         elseif scenario == "IScnHunting" then
+            return;
         else
             -- Scenario inactive
             print("IScn:Scenarios Inactive")

@@ -780,6 +780,8 @@ local orig_onOptionMouseDown = SandboxOptionsScreen.onOptionMouseDown
 function SandboxOptionsScreen:onOptionMouseDown(button, x, y)
 
     if button.internal == "BACK" and LastStandData.chosenChallenge and LastStandData.chosenChallenge.enableSandbox == true then
+        Events.OnInitGlobalModData.Remove(IScnHospital.OnInitGlobalModData);   
+        Events.OnInitGlobalModData.Remove(IScnHunting.OnInitGlobalModData);        
         self:setVisible(false);
         MainScreen.instance.soloScreen:setVisible(true, self.joyfocus)
     else
