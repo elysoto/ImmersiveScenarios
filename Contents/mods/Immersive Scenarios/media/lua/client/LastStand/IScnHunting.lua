@@ -47,9 +47,11 @@ IScnHunting.OnNewGame = function(player, square)
         --Remove all clothes and give player a hospital gown and socks
         pl:clearWornItems();
         pl:getInventory():clear();
+        local clothes = nil
         inv:AddItem("Base.KeyRing");
-        inv:AddItem("Base.Belt");
-        local clothes = inv:AddItem("Base.Vest_Hunting_Orange");
+        clothes = inv:AddItem("Base.Belt2");
+        pl:setWornItem(clothes:getBodyLocation(), clothes);
+        clothes = inv:AddItem("Base.Vest_Hunting_Orange");
         pl:setWornItem(clothes:getBodyLocation(), clothes);
         clothes = inv:AddItem("Base.Socks_Ankle");
         pl:setWornItem(clothes:getBodyLocation(), clothes);
@@ -192,7 +194,7 @@ IScnHunting.OnNewGame = function(player, square)
             c:AddItem("Base.308Box");
             c:AddItem("Base.x2Scope");          
             local tire = c:AddItem("Base.OldTire2");
-            tire:setCondition(5)
+            tire:setCondition(20)
             
             c:AddItem(toolbox);
 
@@ -200,7 +202,7 @@ IScnHunting.OnNewGame = function(player, square)
         end
 
         local familyName = ""
-        local zombie = createZombie(4248, 7232, 0, nil, 0, IsoDirections.N);
+        local zombie = createZombie(4249, 7230, 0, nil, 0, IsoDirections.N);
         if zombie then
             zombie:dressInNamedOutfit("Redneck")
             zombie:DoZombieInventory();        
@@ -218,8 +220,8 @@ IScnHunting.OnNewGame = function(player, square)
             
             local body = IsoDeadBody.new(zombie, false);
                     
-            body:setX(4247);
-            body:setY(7229);
+            body:setX(4249);
+            body:setY(7230);
             body:setZ(0);        
             
             local reanimateHourOffset = 2
@@ -299,7 +301,7 @@ IScnHunting.OnNewGame = function(player, square)
             noteBook:addPage(3, "It has been a strange day. We heard a lot of crazy stuff on the radio about some sickness spreading around. "..familyName.." tried to reach my cousin on the Ham, but no one answered. Maybe they are already on their way? We are going to go fishing at the pond and just catch up.");
             noteBook:addPage(4, "This morning we are going to make the best of it and go out on a hunt while we wait. "..familyName.." hopes to pick out a buck or a rabbit for dinner. Either way, should be better than eating more canned food.\n\n")
             noteBook:addPage(5, "Oww, the pain... We ran across other hunters yesterday, they were just standing in the middle of the forest. We watched them for a long while and just saw them walk around slowly in circles for hours! Eventually "..familyName.." decided we should go check on them, but when we got close, we noticed that one was shot multiple times in the chest and the other was bloody all over! Suddenly they noticed us and started to lunge at us. We ran as fast we could back towards the cabin when I fell down a small ravine and got hurt really bad. " ..familyName.. " managed to drag me back to the cabin. I think my leg is broken. I'm going to try and sleep, but it\'s hard with all this pain.\n\n")
-            noteBook:addPage(6, "Ugg. Just woke up and I feel worse that yesterday. I wonder where "..familyName.." went? It has been oddly quiet. I keep calling out but nothing. I really don't want to get out of bed, it hurts so bad, but I better find out what is going on.\n\n")
+            noteBook:addPage(6, "Ugg. Just woke up and I feel worse than yesterday. I wonder where "..familyName.." went? It has been oddly quiet. I keep calling out but nothing. I really don't want to get out of bed, it hurts so bad, but I better find out what is going on.\n\n")
             noteBook:setName(iscnModData.playerName.."\'s Journal");
         end        
 
@@ -333,13 +335,14 @@ IScnHunting.OnNewGame = function(player, square)
                         
             c:AddItem("Base.Pot");
             c:AddItem("Base.Pan");
+            c:AddItem("Base.RoastingPan");            
             c:AddItem("Base.KitchenKnife");
             c:AddItem("Base.KitchenKnife");
             c:AddItem("Base.Bowl");
             c:AddItem("Base.Fork");
             c:AddItem("Base.Spoon");
             c:AddItem("Base.ButterKnife");
-            c:AddItem("Base.TinOpener");            
+            c:AddItem("Base.TinOpener");        
             
             c:setExplored(true);
         end
@@ -372,11 +375,15 @@ IScnHunting.OnNewGame = function(player, square)
             c:AddItem("Base.Lighter");
             c:AddItem("Base.Matches");
             c:AddItem("Base.Matches");
+            c:AddItem("Base.Scissors");
             c:AddItem("Base.Charcoal");
             c:AddItem("Base.Garbagebag");
             c:AddItem("Base.Garbagebag");
             c:AddItem("Base.Candle");
             c:AddItem("Base.Candle");
+            c:AddItem("Base.MugWhite");
+            c:AddItem("Base.Vinegar");
+            c:AddItem("Base.BakingSoda");
 
             c:AddItem("Base.farming.PotatoBagSeed");
             c:AddItem("Base.farming.TomatoBagSeed");
@@ -422,6 +429,8 @@ IScnHunting.OnNewGame = function(player, square)
             c:AddItem("Base.Garbagebag");
             c:AddItem("Base.Needle");
             c:AddItem("Base.Thread");
+            c:AddItem("Base.Scissors");
+            
                         
             c:AddItem("Base.HandAxe"); 
             
