@@ -241,6 +241,73 @@ IScnHospital.OnNewGame = function(player, square)
             c:setExplored(true);
         end
         
+        ISCN.removeGuns(12926, 2045, 2)     
+        ISCN.removeGuns(12926, 2050, 2)
+        ISCN.removeGuns(12926, 2055, 2)
+        
+        ISCN.removeGuns(12935, 2048, 2)
+        ISCN.removeGuns(12935, 2053, 2)
+        ISCN.removeGuns(12935, 2057, 2)
+        
+        ISCN.removeGuns(12935, 2032, 2)
+        ISCN.removeGuns(12935, 2036, 2)
+        ISCN.removeGuns(12935, 2040, 2)
+        
+        ISCN.removeGuns(12945, 2055, 2)
+        ISCN.removeGuns(12951, 2055, 2)
+        
+        ISCN.removeGuns(12945, 2050, 2)
+        ISCN.removeGuns(12951, 2050, 2)
+        
+        ISCN.removeGuns(12945, 2045, 2)
+        ISCN.removeGuns(12951, 2045, 2)
+        ISCN.removeGuns(12951, 2040, 2)
+        ISCN.removeGuns(12945, 2040, 2)
+        
+        ISCN.removeGuns(12945, 2039, 2)
+        ISCN.removeGuns(12951, 2039, 2)
+        ISCN.removeGuns(12951, 2034, 2)
+        ISCN.removeGuns(12945, 2034, 2)
+        
+        ISCN.removeGuns(12951, 2054, 1)
+        ISCN.removeGuns(12955, 2054, 1)
+        ISCN.removeGuns(12953, 2055, 1)
+        ISCN.removeGuns(12957, 2065, 1)
+        ISCN.removeGuns(12953, 2065, 1)
+        
+        ISCN.removeGuns(12964, 2029, 1)
+        ISCN.removeGuns(12964, 2032, 1)
+        ISCN.removeGuns(12970, 2032, 1)
+        
+        ISCN.removeGuns(12971, 2033, 1)
+        ISCN.removeGuns(12971, 2030, 1)
+        
+        ISCN.removeGuns(12976, 2030, 1)
+        ISCN.removeGuns(12976, 2033, 1)
+        
+        ISCN.removeGuns(12981, 2030, 1)
+        ISCN.removeGuns(12981, 2033, 1)
+        
+        ISCN.removeGuns(12986, 2030, 1)
+        ISCN.removeGuns(12986, 2033, 1)
+        
+        ISCN.removeGuns(12986, 2007, 1)
+        ISCN.removeGuns(12986, 2007, 1)
+        
+        ISCN.removeGuns(12981, 2007, 1)
+        ISCN.removeGuns(12981, 2007, 1)
+        
+        ISCN.removeGuns(12976, 2007, 1)
+        ISCN.removeGuns(12976, 2007, 1)
+        
+        ISCN.removeGuns(12968, 2006, 1)
+        ISCN.removeGuns(12968, 2009, 1)
+        ISCN.removeGuns(12975, 2006, 1)
+        
+        ISCN.removeGuns(12960, 2006, 1)
+        ISCN.removeGuns(12960, 2009, 1)  
+        
+        
         local clim = getClimateManager()
         
         local dur = 48      

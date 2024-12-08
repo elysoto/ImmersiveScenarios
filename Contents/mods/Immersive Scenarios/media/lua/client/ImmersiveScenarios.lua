@@ -18,6 +18,39 @@ ISCN.getContainer = function(x, y, z)
     return nil;
 end
 
+ISCN.removeGuns = function(x, y, z)
+    local c = ISCN.getContainer(x, y, z);        
+    if c ~= nil then
+        
+        local containerItems = c:getItems()
+        if containerItems then
+            local itemsToRemove= {};
+            for i = 0, containerItems:size()-1 do
+                local item = containerItems:get(i);
+                if item then 
+                    local itemName = item:getName()
+                    local dispCategory = item:getDisplayCategory()
+                    local ammoType = item:getAmmoType()
+                    --print(itemName) -- Gun Case
+                    --print(item:getGunType())
+                    --print(item:getDisplayCategory()) -- Ammo
+                    --print(item:getDisplayName())
+                    --print(item:getCategory())
+                    --print(item:getAmmoType()) -- ~= nil 
+                    if string.find(itemName, "Gun Case") or string.find(dispCategory, "Ammo") or ammoType ~= nil then
+                        DebugLog.log("IScn::Removing "..itemName)
+                        itemsToRemove[i] = item
+                    end
+                end
+            end
+            for k, itemToRemove in pairs(itemsToRemove) do
+                c:Remove(itemToRemove)
+            end
+            itemsToRemove = {}
+        end
+    end
+end        
+
 ISCN.switchLight = function(x, y, z, onOff)
 
     DebugLog.log("IScn:switchLight: " ..x.." "..y.." "..z)

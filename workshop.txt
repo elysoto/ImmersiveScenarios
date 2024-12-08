@@ -9,8 +9,6 @@ description=
 description=[h3]INFO:[/h3]
 description=Install ModOptions to enable setting Easy, Normal, Hard options.
 description=
-description=Check out my [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3129968968]collection[/url] for mod ideas.
-description=
 description=These scenarios are designed to be hard and realistic requiring your wits and intelligence to get established.
 description=
 description=[h3]SCENARIOS:[/h3]
@@ -40,6 +38,7 @@ description=
 description=I recommend the following mods to pair with the Hunting Accident scenario.
 description=[list]
 description=    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2831046541]Dynamic Infinite Search Mode[/url]
+description=    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3162507273]Dig Worms[/url]
 description=[/list]
 description=
 description=Tips:
@@ -47,5 +46,6 @@ description=[spoiler]Don't waste your tools as weapons. You'll likely need them 
 description=
 description=[hr][/hr]
 description=https://github.com/elysoto/ImmersiveScenarios
+description=
 tags=Build 41;Hardmode;Map;Realistic
 visibility=public

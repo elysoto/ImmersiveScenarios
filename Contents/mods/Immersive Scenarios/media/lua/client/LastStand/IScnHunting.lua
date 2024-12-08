@@ -115,9 +115,9 @@ IScnHunting.OnNewGame = function(player, square)
         car:getPartById("HeadlightRearLeft"):setCondition(ZombRand(40,80));
         car:getPartById("Muffler"):setCondition(ZombRand(10,80));
         local part = car:getPartById("Battery")
-        part:setCondition(ZombRand(10,15));
+        part:setCondition(ZombRand(20,25));
         local bat = part:getInventoryItem()
-        bat:setDelta(0.13)
+        bat:setDelta(0.19)
         car:getPartById("GasTank"):setCondition(ZombRand(30,80));
         car:getPartById("Heater"):setCondition(ZombRand(30,80));
         car:getPartById("TireFrontLeft"):setCondition(ZombRand(10,80));
